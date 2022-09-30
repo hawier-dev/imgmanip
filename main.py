@@ -9,7 +9,7 @@ import check_requirements
 
 from PySide6 import QtGui
 from PySide6.QtWidgets import QMainWindow, QApplication
-
+ 
 from widgets.main_screen import UiMainWindow
 import qdarktheme
 
