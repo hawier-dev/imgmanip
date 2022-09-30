@@ -485,6 +485,11 @@ class UiMainWindow(QWidget):
     def start_tasks(self):
         self.start_button.setVisible(False)
         self.progress.setVisible(True)
+        try:
+            self.images_list.setCurrentRow(0)
+            self.preview_image(self.images_list.item(0).text())
+        except IndexError:
+            pass
 
         progress = 0
         images_list = [self.images_list.item(index).text() for index in range(self.images_list.count())]
