@@ -27,7 +27,8 @@ from functions.convert import convert_image
 from functions.invert import invert_image
 from functions.resize import resize_image
 from models.sort import Sort
-from models.task import ImageExtension, TaskResize, TaskInvert, TaskConvert, TaskCompress
+from models.task import TaskResize, TaskInvert, TaskConvert, TaskCompress
+from models.image_extension import ImageExtension
 
 Image.MAX_IMAGE_PIXELS = 933120000
 
@@ -316,14 +317,13 @@ class UiMainWindow(QWidget):
 
                     # REMOVE IMAGE FROM LIST
                     elif action.toolTip() == 'Remove':
-                        self.remove_image()
+                        self.remove_image(False)
 
                     # REMOVE IMAGE FROM DISK
                     elif action.toolTip() == 'Remove from disk':
                         confirm_delete = ConfirmDialog(title='Remove file from disk', desc='Are you sure?')
                         if confirm_delete.exec_() == QDialog.Accepted:
-                            self.remove_image()
-                            os.remove(item.text())
+                            self.remove_image(True)
                         else:
                             confirm_delete.close()
             return True
@@ -466,11 +466,13 @@ class UiMainWindow(QWidget):
         self.images_list.addItems(new_images_list)
 
     # Preview image
-    def remove_image(self):
+    def remove_image(self, remove_from_disk=False):
         for selected_image in self.images_list.selectedItems():
             index = self.images_list.row(selected_image)
             self.images_list.takeItem(self.images_list.row(selected_image))
             self.list_of_images.remove(selected_image.text())
+            if remove_from_disk:
+                os.remove(selected_image.text())
             try:
                 self.images_list.setCurrentRow(index)
             except IndexError:
@@ -483,6 +485,11 @@ class UiMainWindow(QWidget):
     def start_tasks(self):
         self.start_button.setVisible(False)
         self.progress.setVisible(True)
+        try:
+            self.images_list.setCurrentRow(0)
+            self.preview_image(self.images_list.item(0).text())
+        except IndexError:
+            pass
 
         progress = 0
         images_list = [self.images_list.item(index).text() for index in range(self.images_list.count())]

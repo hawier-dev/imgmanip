@@ -1,12 +1,6 @@
 import os
 import sys
 
-from PySide6.QtCore import QEvent
-from PySide6.QtGui import QWheelEvent, QCursor, Qt
-
-# noinspection PyUnresolvedReferences
-import check_requirements
-
 from PySide6 import QtGui
 from PySide6.QtWidgets import QMainWindow, QApplication
 
