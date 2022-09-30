@@ -27,7 +27,8 @@ from functions.convert import convert_image
 from functions.invert import invert_image
 from functions.resize import resize_image
 from models.sort import Sort
-from models.task import ImageExtension, TaskResize, TaskInvert, TaskConvert, TaskCompress
+from models.task import TaskResize, TaskInvert, TaskConvert, TaskCompress
+from models.image_extension import ImageExtension
 
 Image.MAX_IMAGE_PIXELS = 933120000
 

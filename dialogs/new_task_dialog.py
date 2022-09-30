@@ -4,7 +4,8 @@ from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
                                QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QComboBox, QLineEdit,
                                QFrame, QHBoxLayout, QSlider)
 
-from models.task import ImageExtension, TaskResize, TaskInvert, TaskConvert, TaskCompress
+from models.task import TaskResize, TaskInvert, TaskConvert, TaskCompress
+from models.image_extension import ImageExtension
 
 
 class NewTaskDialog(QDialog):
