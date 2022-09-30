@@ -3,6 +3,7 @@ import re
 import sys
 from datetime import datetime
 from os.path import basename
+from this import d
 
 import pyperclip
 from PIL import Image
@@ -533,6 +534,7 @@ class UiMainWindow(QWidget):
     def edit_task(self):
         if self.tasks_list.selectedIndexes():
             task_index = self.tasks_list.row(self.tasks_list.selectedItems()[0])
+            print(self.list_of_tasks[task_index])
             edit_task_dialog = NewTaskDialog(
                 self.list_of_tasks[task_index])
             if edit_task_dialog.exec_() == QDialog.Accepted:
@@ -581,16 +583,29 @@ class UiMainWindow(QWidget):
                 self.list_of_tasks.append(
                     TaskCompress(quality=new_task_dialog.compress_quality_slider.value()))
 
-            self.tasks_list.addItem(new_task_dialog.task_picker.currentText())
         else:
             pass
+
+        self.generate_list_of_tasks()
+    
+    def generate_list_of_tasks(self):
+        self.tasks_list.clear()
+        for item in self.list_of_tasks:
+            if type(item) == TaskResize:
+                self.tasks_list.addItem(f'Resize {item.new_width}x{item.new_height}')
+            elif type(item) == TaskInvert:
+                self.tasks_list.addItem('Invert')            
+            elif type(item) == TaskConvert:
+                self.tasks_list.addItem(f'Convert {item.convert_ext.value}')            
+            elif type(item) == TaskCompress:
+                self.tasks_list.addItem(f'Compress q: {item.quality}%')
 
     # Remove task
     def remove_task(self):
         for selected_task in self.tasks_list.selectedItems():
             index = self.tasks_list.row(selected_task)
-            self.tasks_list.takeItem(self.tasks_list.row(selected_task))
             self.list_of_tasks.remove(self.list_of_tasks[self.tasks_list.row(selected_task)])
+            self.generate_list_of_tasks()
             try:
                 self.tasks_list.setCurrentRow(index)
             except IndexError:
