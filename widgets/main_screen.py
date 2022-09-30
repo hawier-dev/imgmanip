@@ -317,14 +317,13 @@ class UiMainWindow(QWidget):
 
                     # REMOVE IMAGE FROM LIST
                     elif action.toolTip() == 'Remove':
-                        self.remove_image()
+                        self.remove_image(False)
 
                     # REMOVE IMAGE FROM DISK
                     elif action.toolTip() == 'Remove from disk':
                         confirm_delete = ConfirmDialog(title='Remove file from disk', desc='Are you sure?')
                         if confirm_delete.exec_() == QDialog.Accepted:
-                            self.remove_image()
-                            os.remove(item.text())
+                            self.remove_image(True)
                         else:
                             confirm_delete.close()
             return True
@@ -467,11 +466,13 @@ class UiMainWindow(QWidget):
         self.images_list.addItems(new_images_list)
 
     # Preview image
-    def remove_image(self):
+    def remove_image(self, remove_from_disk=False):
         for selected_image in self.images_list.selectedItems():
             index = self.images_list.row(selected_image)
             self.images_list.takeItem(self.images_list.row(selected_image))
             self.list_of_images.remove(selected_image.text())
+            if remove_from_disk:
+                os.remove(selected_image.text())
             try:
                 self.images_list.setCurrentRow(index)
             except IndexError:
