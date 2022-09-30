@@ -16,10 +16,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         self.setMouseTracking(True)
         self.ui = UiMainWindow(self)
-    #
-    # def wheelEvent(self, event: QWheelEvent) -> None:
-    #     if event.modifiers() & Qt.ControlModifier:
-    #         self.ui.zooming()
+
 
 
 if __name__ == "__main__":
