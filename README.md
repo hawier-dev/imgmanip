@@ -1,0 +1,3 @@
+# IMGmanip
+
+Image manipulation tool
