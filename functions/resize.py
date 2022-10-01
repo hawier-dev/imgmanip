@@ -1,11 +1,11 @@
 from PIL import Image
 
 from functions.get_ext import get_ext_from_file
-from models.task import TaskResize
+from models.task import ResizeTask
 
 
 # TODO: KILKA RAZY WIEKSZE ZDJECIE ITD
-def resize_image(image, resize_task: TaskResize, overwrite):
+def resize_image(image, resize_task: ResizeTask, overwrite):
     # Image
     img = Image.open(image)
     width, height = img.size

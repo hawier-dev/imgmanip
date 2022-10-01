@@ -1,10 +1,10 @@
 from PIL import Image
 
 from functions.get_ext import get_ext_from_file
-from models.task import TaskCompress
+from models.task import CompressTask
 
 
-def compress_image(image, compress_task: TaskCompress, overwrite):
+def compress_image(image, compress_task: CompressTask, overwrite):
     img = Image.open(image)
     image_ext = get_ext_from_file(image)
     new_image_name = image.replace(image_ext, f'_new{image_ext}')

@@ -18,7 +18,6 @@ class MainWindow(QMainWindow):
         self.ui = UiMainWindow(self)
 
 
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyleSheet(qdarktheme.load_stylesheet())
