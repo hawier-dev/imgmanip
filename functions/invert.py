@@ -1,10 +1,10 @@
 import cv2
 
 from functions.get_ext import get_ext_from_file
-from models.task import TaskInvert
+from models.task import InvertTask
 
 
-def invert_image(image, invert_task: TaskInvert, overwrite):
+def invert_image(image, invert_task: InvertTask, overwrite):
     img = cv2.imread(image)
     inverted_image = cv2.bitwise_not(img)
     image_ext = get_ext_from_file(image)

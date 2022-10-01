@@ -5,10 +5,10 @@ from PIL import Image
 import numpy as np
 
 from functions.get_ext import get_ext_from_file
-from models.task import TaskColorDetection
+from models.task import ColorDetectionTask
 
 
-def detect_color(image, task: TaskColorDetection, overwrite):
+def detect_color(image, task: ColorDetectionTask, overwrite):
     img = cv2.imread(image)
     # From color
     lower = np.array(task.from_color, dtype="uint8")
