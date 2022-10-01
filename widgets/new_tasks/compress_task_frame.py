@@ -1,11 +1,18 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFrame, QVBoxLayout, QLayout, QLabel, QHBoxLayout, QSlider
 
+from widgets.horizontal_line import HorizontalLine
+
 
 class CompressTaskFrame(QFrame):
     def __init__(self):
         super().__init__()
         self.compress_box = QVBoxLayout()
+
+        self.description_label = QLabel()
+        self.description_label.setText(
+            "This task compresses the image. The lower the 'quality',\nthe smaller the file size.")
+
         self.compress_box.setObjectName(u"compress_box")
         self.compress_box.setSizeConstraint(QLayout.SetDefaultConstraint)
         # Label + slider box
@@ -28,6 +35,9 @@ class CompressTaskFrame(QFrame):
 
         self.compress_quality_box.addWidget(self.compress_quality_value_label)
         self.compress_quality_box.addWidget(self.compress_quality_slider)
+
+        self.compress_box.addWidget(self.description_label)
+        self.compress_box.addWidget(HorizontalLine())
         self.compress_box.addWidget(self.compress_quality_label)
         self.compress_box.addLayout(self.compress_quality_box)
         self.setLayout(self.compress_box)

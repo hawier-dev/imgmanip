@@ -1,5 +1,7 @@
 from PySide6.QtWidgets import QWidget, QFrame, QVBoxLayout, QLabel, QSizePolicy, QHBoxLayout, QLineEdit, QLayout
 
+from widgets.horizontal_line import HorizontalLine
+
 
 class ResizeTaskFrame(QFrame):
     def __init__(self):
@@ -7,6 +9,10 @@ class ResizeTaskFrame(QFrame):
         self.resize_box = QVBoxLayout()
         self.resize_box.setObjectName(u"resize_box")
         self.resize_box.setSizeConstraint(QLayout.SetDefaultConstraint)
+
+        self.description_label = QLabel()
+        self.description_label.setText(
+            "This task resizes the images to the given resolution.")
 
         # Name label
         self.resize_label = QLabel(self)
@@ -39,6 +45,10 @@ class ResizeTaskFrame(QFrame):
         self.resize_inputs_h_box.addWidget(self.resize_width_input)
         self.resize_inputs_h_box.addWidget(self.x_label)
         self.resize_inputs_h_box.addWidget(self.resize_height_input)
+
+        self.resize_box.addWidget(self.description_label)
+        self.resize_box.addWidget(HorizontalLine())
+        
         self.resize_box.addWidget(self.resize_label)
         self.resize_box.addLayout(self.resize_inputs_h_box)
 

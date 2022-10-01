@@ -33,6 +33,7 @@ class NewTaskDialog(QDialog):
         # Task label
         self.task_picker_frame = QFrame()
         self.task_picker_box = QVBoxLayout()
+        self.task_picker_box.setContentsMargins(10, 0, 10, 0)
 
         self.task_label = QLabel(self)
         self.task_label.setObjectName(u"condition_label")
@@ -61,8 +62,6 @@ class NewTaskDialog(QDialog):
         # Widget frames
         for task in self.tasks:
             self.vertical_layout.addWidget(self.tasks[task])
-
-        self.vertical_layout.addStretch(20)
 
         self.grid_layout.addLayout(self.vertical_layout, 0, 0, 1, 1)
 
@@ -98,10 +97,10 @@ class NewTaskDialog(QDialog):
         # RESIZE TASK
         selected_task = self.task_picker.currentText()
         for task in self.tasks:
-            if selected_task == task:
-                self.tasks[task].show()
-            else:
-                self.tasks[task].hide()
+            self.tasks[task].hide()
+
+        self.tasks[self.task_picker.currentText()].show()
+        self.setFixedSize(self.sizeHint())
 
     # Edit dialog
     def edit_dialog(self):
