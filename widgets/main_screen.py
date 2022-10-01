@@ -19,6 +19,7 @@ from natsort import natsorted
 from plyer import filechooser
 
 from dialogs.confirm_dialog import ConfirmDialog
+from dialogs.error_dialog import ErrorDialog
 from dialogs.new_task_dialog import NewTaskDialog
 from dialogs.rename_dialog import RenameDialog
 from dialogs.sort_images_dialog import SortImagesDialog
@@ -39,8 +40,6 @@ if sys.platform == 'win32':
 
 
 class UiMainWindow(QWidget):
-    zoom = 1
-
     def __init__(self, main_window):
         # Main window
         super().__init__()
@@ -484,6 +483,28 @@ class UiMainWindow(QWidget):
 
     # Start tasks
     def start_tasks(self):
+        # If no image added
+        if not self.list_of_images:
+            error_dialog = ErrorDialog(title='Start tasks',
+                                       error='You need to select at least one image.')
+            if error_dialog.exec_() == QDialog.Accepted:
+                return
+        # If no task added
+        if not self.list_of_tasks:
+            error_dialog = ErrorDialog(title='Start tasks',
+                                       error='You need to select at least one task.')
+            if error_dialog.exec_() == QDialog.Accepted:
+                return
+
+        # Overwrite warning
+        if self.overwrite_checkbox.isChecked():
+            confirm_delete = ConfirmDialog(title='Start tasks',
+                                           desc='This process will overwrite all selected files!\nAre you sure?')
+            if confirm_delete.exec_() == QDialog.Accepted:
+                confirm_delete.close()
+            else:
+                confirm_delete.close()
+                return
         self.start_button.setVisible(False)
         self.progress.setVisible(True)
         try:
@@ -534,7 +555,6 @@ class UiMainWindow(QWidget):
     def edit_task(self):
         if self.tasks_list.selectedIndexes():
             task_index = self.tasks_list.row(self.tasks_list.selectedItems()[0])
-            print(self.list_of_tasks[task_index])
             edit_task_dialog = NewTaskDialog(
                 self.list_of_tasks[task_index])
             if edit_task_dialog.exec_() == QDialog.Accepted:
@@ -587,16 +607,16 @@ class UiMainWindow(QWidget):
             pass
 
         self.generate_list_of_tasks()
-    
+
     def generate_list_of_tasks(self):
         self.tasks_list.clear()
         for item in self.list_of_tasks:
             if type(item) == TaskResize:
                 self.tasks_list.addItem(f'Resize {item.new_width}x{item.new_height}')
             elif type(item) == TaskInvert:
-                self.tasks_list.addItem('Invert')            
+                self.tasks_list.addItem('Invert')
             elif type(item) == TaskConvert:
-                self.tasks_list.addItem(f'Convert {item.convert_ext.value}')            
+                self.tasks_list.addItem(f'Convert {item.convert_ext.value}')
             elif type(item) == TaskCompress:
                 self.tasks_list.addItem(f'Compress q: {item.quality}%')
 
