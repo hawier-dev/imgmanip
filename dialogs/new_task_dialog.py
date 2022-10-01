@@ -2,9 +2,9 @@ from PySide6.QtCore import (QMetaObject,
                             Qt)
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
                                QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QComboBox, QLineEdit,
-                               QFrame, QHBoxLayout, QSlider)
+                               QFrame, QHBoxLayout, QSlider, QCheckBox)
 
-from models.task import TaskResize, TaskInvert, TaskConvert, TaskCompress
+from models.task import TaskResize, TaskInvert, TaskConvert, TaskCompress, TaskColorDetection
 from models.image_extension import ImageExtension
 
 
@@ -33,13 +33,19 @@ class NewTaskDialog(QDialog):
         self.task_label.setObjectName(u"condition_label")
         self.task_label.setText("Task")
 
+        self.task_types = [
+            'resize',
+            'invert',
+            'convert',
+            'compress',
+            'color_detection'
+        ]
+
         # Task input
         self.task_picker = QComboBox(self)
 
-        self.task_picker.addItem("resize")
-        self.task_picker.addItem("invert")
-        self.task_picker.addItem("convert")
-        self.task_picker.addItem("compress")
+        for task in self.task_types:
+            self.task_picker.addItem(task)
 
         self.task_picker.setObjectName(u"combo_box")
         self.task_picker.currentTextChanged.connect(self.change_task)
@@ -163,7 +169,21 @@ class NewTaskDialog(QDialog):
         self.color_detection_box = QVBoxLayout()
         self.color_detection_box.setObjectName(u"color_detection_box")
         self.color_detection_box.setSizeConstraint(QLayout.SetDefaultConstraint)
-
+        # Save mask
+        self.save_mask_checkbox = QCheckBox()
+        self.save_mask_checkbox.setText('Save image mask')
+        self.save_mask_checkbox.setChecked(False)
+        # Save SHAPEFILE
+        self.save_shp_checkbox = QCheckBox()
+        self.save_shp_checkbox.setText('Save shapefile(.shp) file')
+        self.save_shp_checkbox.setChecked(False)
+        # Save GEOJSON
+        self.save_geojson_checkbox = QCheckBox()
+        self.save_geojson_checkbox.setText('Save geojson file')
+        self.save_geojson_checkbox.setChecked(False)
+        self.color_detection_box.addWidget(self.save_mask_checkbox)
+        self.color_detection_box.addWidget(self.save_shp_checkbox)
+        self.color_detection_box.addWidget(self.save_geojson_checkbox)
         self.color_detection_frame.setLayout(self.color_detection_box)
         self.color_detection_frame.hide()
         # endregion
@@ -211,24 +231,35 @@ class NewTaskDialog(QDialog):
             self.inverse_frame.hide()
             self.convert_frame.hide()
             self.compress_frame.hide()
+            self.color_detection_frame.hide()
         # INVERT TASK
         elif self.task_picker.currentText() == 'invert':
             self.resize_frame.hide()
             self.inverse_frame.show()
             self.convert_frame.hide()
             self.compress_frame.hide()
+            self.color_detection_frame.hide()
         # CONVERT TASK
         elif self.task_picker.currentText() == 'convert':
             self.resize_frame.hide()
             self.inverse_frame.hide()
             self.convert_frame.show()
             self.compress_frame.hide()
+            self.color_detection_frame.hide()
         # COMPRESS TASK
         elif self.task_picker.currentText() == 'compress':
             self.resize_frame.hide()
             self.inverse_frame.hide()
             self.convert_frame.hide()
             self.compress_frame.show()
+            self.color_detection_frame.hide()
+        # COLOR DETECTION TASK
+        elif self.task_picker.currentText() == 'color_detection':
+            self.resize_frame.hide()
+            self.inverse_frame.hide()
+            self.convert_frame.hide()
+            self.compress_frame.hide()
+            self.color_detection_frame.show()
 
     # Edit dialog
     def edit_dialog(self):
@@ -243,6 +274,9 @@ class NewTaskDialog(QDialog):
             self.extension_picker.setCurrentText(self.task.convert_ext.value)
         elif type(self.task) == TaskCompress:
             self.task_picker.setCurrentText("compress")
+            self.compress_quality_slider.setValue(self.task.quality)
+        elif type(self.task) == TaskColorDetection:
+            self.task_picker.setCurrentText("color_detection")
             self.compress_quality_slider.setValue(self.task.quality)
         self.change_task()
 
