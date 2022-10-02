@@ -1,11 +1,18 @@
 from PySide6.QtWidgets import QWidget, QFrame, QVBoxLayout, QLayout, QLabel
 
+from models.task import InvertTask
 from widgets.horizontal_line import HorizontalLine
 
 
 class InvertTaskFrame(QFrame):
-    def __init__(self):
+    def __init__(self, task=None):
         super().__init__()
+
+        if task and type(task) == InvertTask:
+            self.task = task
+        else:
+            self.task = InvertTask()
+
         self.inverse_box = QVBoxLayout()
 
         self.description_label = QLabel()

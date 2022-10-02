@@ -1,9 +1,8 @@
 from PySide6 import QtWidgets
 from PySide6.QtGui import QCursor, Qt, QFont
-from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPushButton, QCheckBox, QDialog
+from PySide6.QtWidgets import QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPushButton, QCheckBox, QDialog
 
 from dialogs.new_task_dialog import NewTaskDialog
-from models.image_extension import ImageExtension
 from models.task import ResizeTask, InvertTask, ConvertTask, CompressTask
 
 
@@ -72,24 +71,7 @@ class RightPart(QVBoxLayout):
             edit_task_dialog = NewTaskDialog(
                 self.list_of_tasks[task_index])
             if edit_task_dialog.exec_() == QDialog.Accepted:
-                # RESIZE TASK
-                if edit_task_dialog.task_picker.currentText() == 'resize':
-                    self.list_of_tasks[task_index] = ResizeTask(
-                        new_width=edit_task_dialog.tasks['resize'].resize_width_input.text(),
-                        new_height=edit_task_dialog.tasks['resize'].resize_height_input.text())
-
-                # INVERT TASK
-                elif edit_task_dialog.task_picker.currentText() == 'invert':
-                    self.list_of_tasks[task_index] = InvertTask()
-
-                # CONVERT TASK
-                elif edit_task_dialog.task_picker.currentText() == 'convert':
-                    self.list_of_tasks[task_index] = ConvertTask(
-                        convert_ext=ImageExtension(edit_task_dialog.tasks['convert'].extension_picker.currentText()))
-
-                elif edit_task_dialog.task_picker.currentText() == 'compress':
-                    self.list_of_tasks[task_index] = CompressTask(
-                        quality=edit_task_dialog.tasks['compress'].compress_quality_slider.value())
+                self.list_of_tasks[task_index] = edit_task_dialog.tasks[edit_task_dialog.task_picker.currentText()].task
 
                 self.generate_list_of_tasks()
 
@@ -100,40 +82,14 @@ class RightPart(QVBoxLayout):
     def add_task(self):
         new_task_dialog = NewTaskDialog()
         if new_task_dialog.exec_() == QDialog.Accepted:
-            # RESIZE TASK
-            if new_task_dialog.task_picker.currentText() == 'resize':
-                self.list_of_tasks.append(ResizeTask(
-                    new_width=new_task_dialog.tasks['resize'].resize_width_input.text(),
-                    new_height=new_task_dialog.tasks['resize'].resize_height_input.text()))
-            # INVERT TASK
-            elif new_task_dialog.task_picker.currentText() == 'invert':
-                self.list_of_tasks.append(InvertTask())
-            # CONVERT TASK
-            elif new_task_dialog.task_picker.currentText() == 'convert':
-                self.list_of_tasks.append(
-                    ConvertTask(
-                        convert_ext=ImageExtension(new_task_dialog.tasks['convert'].extension_picker.currentText())))
-            # COMPRESS TASK
-            elif new_task_dialog.task_picker.currentText() == 'compress':
-                self.list_of_tasks.append(
-                    CompressTask(quality=new_task_dialog.tasks['compress'].compress_quality_slider.value()))
-
-        else:
-            pass
+            self.list_of_tasks.append(new_task_dialog.tasks[new_task_dialog.task_picker.currentText()].task)
 
         self.generate_list_of_tasks()
 
     def generate_list_of_tasks(self):
         self.tasks_list.clear()
         for item in self.list_of_tasks:
-            if type(item) == ResizeTask:
-                self.tasks_list.addItem(f'Resize {item.new_width}x{item.new_height}')
-            elif type(item) == InvertTask:
-                self.tasks_list.addItem('Invert')
-            elif type(item) == ConvertTask:
-                self.tasks_list.addItem(f'Convert {item.convert_ext.value}')
-            elif type(item) == CompressTask:
-                self.tasks_list.addItem(f'Compress q: {item.quality}%')
+            self.tasks_list.addItem(item.name)
 
     # Remove task
     def remove_task(self):

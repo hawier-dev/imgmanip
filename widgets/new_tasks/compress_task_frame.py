@@ -1,12 +1,19 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFrame, QVBoxLayout, QLayout, QLabel, QHBoxLayout, QSlider
 
+from models.task import CompressTask
 from widgets.horizontal_line import HorizontalLine
 
 
 class CompressTaskFrame(QFrame):
-    def __init__(self):
+    def __init__(self, task=None):
         super().__init__()
+
+        if task and type(task) == CompressTask:
+            self.task = task
+        else:
+            self.task = CompressTask(quality=95)
+
         self.compress_box = QVBoxLayout()
 
         self.description_label = QLabel()
@@ -26,7 +33,7 @@ class CompressTaskFrame(QFrame):
         self.compress_quality_slider = QSlider(Qt.Horizontal)
         self.compress_quality_slider.setMinimum(1)
         self.compress_quality_slider.setMaximum(100)
-        self.compress_quality_slider.setValue(95)
+        self.compress_quality_slider.setValue(self.task.quality)
         self.compress_quality_slider.setTickPosition(QSlider.TicksBelow)
         self.compress_quality_slider.setTickInterval(5)
         self.compress_quality_slider.valueChanged.connect(self.update_slider_value)
@@ -46,3 +53,4 @@ class CompressTaskFrame(QFrame):
     # Compress slider value
     def update_slider_value(self):
         self.compress_quality_value_label.setText(f'{self.compress_quality_slider.value()}%')
+        self.task.quality = self.compress_quality_slider.value()

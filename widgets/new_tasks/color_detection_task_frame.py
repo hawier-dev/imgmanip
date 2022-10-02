@@ -1,15 +1,26 @@
 from PySide6.QtWidgets import QFrame, QVBoxLayout, QCheckBox, QLayout, QLabel
 
+from models.task import ColorDetectionTask
 from widgets.horizontal_line import HorizontalLine
 
 
 class ColorDetectionTaskFrame(QFrame):
-    def __init__(self):
+    def __init__(self, task=None):
         super().__init__()
+
+        if task and type(task) == ColorDetectionTask:
+            self.task = task
+        else:
+            self.task = ColorDetectionTask('', '', True, False, False)
+
         self.description_label = QLabel()
         self.description_label.setText(
-            "This task marks where the given color appears in \nthe image. Additionally, it can save the mask in .png \n"
-            "format, shapefile file and geojson file.")
+            "This task marks where the given color appears in the image."
+            "\n"
+            "Additionally, it can save the mask in .png "
+            "\n "
+            "format, shapefile file and geojson file."
+        )
 
         self.color_detection_frame = QFrame()
         self.color_detection_box = QVBoxLayout()
@@ -18,15 +29,19 @@ class ColorDetectionTaskFrame(QFrame):
         # Save mask
         self.save_mask_checkbox = QCheckBox()
         self.save_mask_checkbox.setText('Save image mask')
-        self.save_mask_checkbox.setChecked(False)
+        self.save_mask_checkbox.setChecked(self.task.save_mask)
+        self.save_mask_checkbox.stateChanged.connect(self.change_values)
         # Save SHAPEFILE
         self.save_shp_checkbox = QCheckBox()
         self.save_shp_checkbox.setText('Save shapefile(.shp) file')
-        self.save_shp_checkbox.setChecked(False)
+        self.save_shp_checkbox.setChecked(self.task.save_shp)
+        self.save_shp_checkbox.stateChanged.connect(self.change_values)
         # Save GEOJSON
         self.save_geojson_checkbox = QCheckBox()
         self.save_geojson_checkbox.setText('Save geojson file')
-        self.save_geojson_checkbox.setChecked(False)
+        self.save_geojson_checkbox.setChecked(self.task.save_geojson)
+        self.save_geojson_checkbox.stateChanged.connect(self.change_values)
+
         self.color_detection_box.addWidget(self.description_label)
         self.color_detection_box.addWidget(HorizontalLine())
         self.color_detection_box.addWidget(self.save_mask_checkbox)
@@ -34,3 +49,9 @@ class ColorDetectionTaskFrame(QFrame):
         self.color_detection_box.addWidget(self.save_geojson_checkbox)
         self.setLayout(self.color_detection_box)
         self.hide()
+
+    # Change values
+    def change_values(self):
+        self.task.save_mask = self.save_mask_checkbox.isChecked()
+        self.task.save_shp = self.save_shp_checkbox.isChecked()
+        self.task.save_geojson = self.save_geojson_checkbox.isChecked()

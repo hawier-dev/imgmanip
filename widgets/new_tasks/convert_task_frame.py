@@ -1,12 +1,19 @@
 from PySide6.QtWidgets import QWidget, QLayout, QVBoxLayout, QFrame, QComboBox, QLabel
 
 from models.image_extension import ImageExtension
+from models.task import ConvertTask
 from widgets.horizontal_line import HorizontalLine
 
 
 class ConvertTaskFrame(QFrame):
-    def __init__(self):
+    def __init__(self, task=None):
         super().__init__()
+
+        if task and type(task) == ConvertTask:
+            self.task = task
+        else:
+            self.task = ConvertTask(convert_ext=ImageExtension.PNG)
+
         self.convert_box = QVBoxLayout()
 
         self.description_label = QLabel()
@@ -21,6 +28,7 @@ class ConvertTaskFrame(QFrame):
         # Extension picker
         self.extension_picker = QComboBox(self)
         self.extension_picker.addItems([ext.value for ext in ImageExtension])
+        self.extension_picker.setCurrentText(self.task.convert_ext.value)
 
         self.extension_picker.setObjectName(u"extension_picker")
 
@@ -31,3 +39,7 @@ class ConvertTaskFrame(QFrame):
         self.convert_box.addWidget(self.extension_picker)
         self.setLayout(self.convert_box)
         self.hide()
+
+    # Change values
+    def change_values(self):
+        self.task.convert_ext = ImageExtension(self.extension_picker.currentText())

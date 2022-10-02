@@ -1,11 +1,19 @@
-from PySide6.QtWidgets import QWidget, QFrame, QVBoxLayout, QLabel, QSizePolicy, QHBoxLayout, QLineEdit, QLayout
+from PySide6.QtGui import QIntValidator
+from PySide6.QtWidgets import QFrame, QVBoxLayout, QLabel, QSizePolicy, QHBoxLayout, QLineEdit, QLayout
 
+from models.task import ResizeTask
 from widgets.horizontal_line import HorizontalLine
 
 
 class ResizeTaskFrame(QFrame):
-    def __init__(self):
+    def __init__(self, task=None):
         super().__init__()
+
+        if task and type(task) == ResizeTask:
+            self.task = task
+        else:
+            self.task = ResizeTask(new_width=800, new_height=600)
+
         self.resize_box = QVBoxLayout()
         self.resize_box.setObjectName(u"resize_box")
         self.resize_box.setSizeConstraint(QLayout.SetDefaultConstraint)
@@ -25,9 +33,15 @@ class ResizeTaskFrame(QFrame):
         self.resize_label.setText("New size")
 
         # Resize inputs
+        # validator
+        int_validator = QIntValidator()
+
         self.resize_inputs_h_box = QHBoxLayout()
         self.resize_width_input = QLineEdit(self)
         self.resize_width_input.setObjectName(u"resize_width_input")
+        self.resize_width_input.setText(str(self.task.new_width))
+        self.resize_width_input.setValidator(int_validator)
+        self.resize_width_input.textEdited.connect(self.change_resize)
 
         # X label between width and height -> width x height
         self.x_label = QLabel(self)
@@ -36,6 +50,9 @@ class ResizeTaskFrame(QFrame):
 
         self.resize_height_input = QLineEdit(self)
         self.resize_height_input.setObjectName(u"resize_height_input")
+        self.resize_height_input.setText(str(self.task.new_height))
+        self.resize_height_input.setValidator(int_validator)
+        self.resize_height_input.textEdited.connect(self.change_resize)
 
         # size_policy_resize_input = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         # size_policy_resize_input.setHorizontalStretch(0)
@@ -48,9 +65,14 @@ class ResizeTaskFrame(QFrame):
 
         self.resize_box.addWidget(self.description_label)
         self.resize_box.addWidget(HorizontalLine())
-        
+
         self.resize_box.addWidget(self.resize_label)
         self.resize_box.addLayout(self.resize_inputs_h_box)
 
         self.setLayout(self.resize_box)
         self.hide()
+
+    # Change text event for
+    def change_resize(self):
+        self.task.new_width = int(self.resize_width_input.text())
+        self.task.new_height = int(self.resize_height_input.text())

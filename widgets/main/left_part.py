@@ -181,7 +181,7 @@ class LeftPart(QVBoxLayout):
         if item:
             index = self.images_list.row(item)
             self.images_list.takeItem(index)
-            self.list_of_images.remove(index)
+            self.list_of_images.remove(item.text())
             if remove_from_disk:
                 os.remove(item.text())
             try:
