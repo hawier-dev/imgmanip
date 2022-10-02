@@ -1,11 +1,8 @@
 from PySide6.QtCore import (QMetaObject,
                             Qt)
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
-                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QComboBox, QLineEdit,
-                               QFrame, QHBoxLayout, QSlider, QCheckBox)
+                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QComboBox, QFrame)
 
-from models.task import ResizeTask, InvertTask, ConvertTask, CompressTask, ColorDetectionTask
-from models.image_extension import ImageExtension
 from widgets.new_tasks.color_detection_task_frame import ColorDetectionTaskFrame
 from widgets.new_tasks.compress_task_frame import CompressTaskFrame
 from widgets.new_tasks.convert_task_frame import ConvertTaskFrame
@@ -14,13 +11,13 @@ from widgets.new_tasks.resize_task_frame import ResizeTaskFrame
 
 
 class NewTaskDialog(QDialog):
-    def __init__(self, task=None):
+    def __init__(self, task_to_edit=None):
         super().__init__()
         if not self.objectName():
             self.setObjectName(u"self")
 
         self.setWindowTitle('New task')
-        self.task = task
+        self.task_to_edit = task_to_edit
 
         self.grid_layout = QGridLayout(self)
         self.grid_layout.setObjectName(u"grid_layout")
@@ -33,17 +30,18 @@ class NewTaskDialog(QDialog):
         # Task label
         self.task_picker_frame = QFrame()
         self.task_picker_box = QVBoxLayout()
+        self.task_picker_box.setContentsMargins(10, 0, 10, 0)
 
         self.task_label = QLabel(self)
         self.task_label.setObjectName(u"condition_label")
         self.task_label.setText("Task")
 
         self.tasks = {
-            'resize': ResizeTaskFrame(),
-            'invert': InvertTaskFrame(),
-            'convert': ConvertTaskFrame(),
-            'compress': CompressTaskFrame(),
-            'color_detection': ColorDetectionTaskFrame(),
+            'resize': ResizeTaskFrame(self.task_to_edit),
+            'invert': InvertTaskFrame(self.task_to_edit),
+            'convert': ConvertTaskFrame(self.task_to_edit),
+            'compress': CompressTaskFrame(self.task_to_edit),
+            'color_detection': ColorDetectionTaskFrame(self.task_to_edit),
         }
 
         # Task input
@@ -61,8 +59,6 @@ class NewTaskDialog(QDialog):
         # Widget frames
         for task in self.tasks:
             self.vertical_layout.addWidget(self.tasks[task])
-
-        self.vertical_layout.addStretch(20)
 
         self.grid_layout.addLayout(self.vertical_layout, 0, 0, 1, 1)
 
@@ -86,7 +82,7 @@ class NewTaskDialog(QDialog):
         self.button_box.rejected.connect(self.reject)
         self.grid_layout.addWidget(self.button_box, 1, 0, 1, 1)
 
-        if task:
+        if task_to_edit:
             self.edit_dialog()
 
         self.change_task()
@@ -98,25 +94,14 @@ class NewTaskDialog(QDialog):
         # RESIZE TASK
         selected_task = self.task_picker.currentText()
         for task in self.tasks:
-            if selected_task == task:
-                self.tasks[task].show()
-            else:
-                self.tasks[task].hide()
+            self.tasks[task].hide()
+
+        self.tasks[self.task_picker.currentText()].show()
+        self.setFixedSize(self.sizeHint())
 
     # Edit dialog
     def edit_dialog(self):
-        if type(self.task) == ResizeTask:
-            self.task_picker.setCurrentText("resize")
-            self.tasks['resize'].resize_width_input.setText(self.task.new_width)
-            self.tasks['resize'].resize_height_input.setText(self.task.new_height)
-        elif type(self.task) == InvertTask:
-            self.task_picker.setCurrentText("invert")
-        elif type(self.task) == ConvertTask:
-            self.task_picker.setCurrentText("convert")
-            self.tasks['convert'].extension_picker.setCurrentText(self.task.convert_ext.value)
-        elif type(self.task) == CompressTask:
-            self.task_picker.setCurrentText("compress")
-            self.tasks['compress'].compress_quality_slider.setValue(self.task.quality)
-        elif type(self.task) == ColorDetectionTask:
-            self.task_picker.setCurrentText("color_detection")
+        self.task_picker.setCurrentText(self.task_to_edit.name)
+        self.tasks[self.task_to_edit.name].task = self.task_to_edit
+
         self.change_task()

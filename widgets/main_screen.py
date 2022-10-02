@@ -39,7 +39,6 @@ class UiMainWindow(QWidget):
         # main_window.setMaximumHeight(600)
         self.main_window = main_window
 
-        # region ACTIONS
         # Creating FILE actions
         self.new_action = QAction("&New", self)
         self.exit_action = QAction("&Exit", self)
@@ -47,7 +46,6 @@ class UiMainWindow(QWidget):
         # Creating EDIT actions
         self.fit_in_view_action = QAction("&Fit in view", self, checkable=True)
         self.fit_in_view_action.setChecked(True)
-        # endregion
 
         self.create_menu_bar()
 
@@ -94,6 +92,7 @@ class UiMainWindow(QWidget):
     def exit_tool(self):
         sys.exit()
 
+    # Menus on right click
     def eventFilter(self, source, event):
         if (event.type() == QtCore.QEvent.ContextMenu and
                 source is self.left_part.images_list):
