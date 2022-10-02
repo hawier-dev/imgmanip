@@ -29,6 +29,7 @@ class ConvertTaskFrame(QFrame):
         self.extension_picker = QComboBox(self)
         self.extension_picker.addItems([ext.value for ext in ImageExtension])
         self.extension_picker.setCurrentText(self.task.convert_ext.value)
+        self.extension_picker.currentTextChanged.connect(self.change_values)
 
         self.extension_picker.setObjectName(u"extension_picker")
 
