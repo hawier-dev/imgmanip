@@ -1,4 +1,4 @@
-from PySide6.QtCore import (QMetaObject, Qt)
+from PySide6.QtCore import (QMetaObject, Qt, QSize)
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
                                QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QLineEdit)
 
@@ -10,6 +10,7 @@ class RenameDialog(QDialog):
             self.setObjectName(u"self")
 
         self.setWindowTitle('Rename')
+        self.resize(400, 50)
 
         self.grid_layout = QGridLayout(self)
         self.grid_layout.setObjectName(u"grid_layout")
@@ -40,5 +41,4 @@ class RenameDialog(QDialog):
         self.button_box.rejected.connect(self.reject)
 
         self.grid_layout.addWidget(self.button_box, 1, 0, 1, 1)
-
         QMetaObject.connectSlotsByName(self)

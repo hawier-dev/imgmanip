@@ -3,11 +3,12 @@ from PySide6.QtCore import (QMetaObject,
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
                                QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QComboBox, QFrame)
 
-from widgets.new_tasks.color_detection_task_frame import ColorDetectionTaskFrame
-from widgets.new_tasks.compress_task_frame import CompressTaskFrame
-from widgets.new_tasks.convert_task_frame import ConvertTaskFrame
-from widgets.new_tasks.invert_task_frame import InvertTaskFrame
-from widgets.new_tasks.resize_task_frame import ResizeTaskFrame
+from widgets.task_frames.color_detection_task_frame import ColorDetectionTaskFrame
+from widgets.task_frames.compress_task_frame import CompressTaskFrame
+from widgets.task_frames.convert_task_frame import ConvertTaskFrame
+from widgets.task_frames.flip_task_frame import FlipTaskFrame
+from widgets.task_frames.invert_task_frame import InvertTaskFrame
+from widgets.task_frames.resize_task_frame import ResizeTaskFrame
 
 
 class NewTaskDialog(QDialog):
@@ -39,6 +40,7 @@ class NewTaskDialog(QDialog):
         self.tasks = {
             'resize': ResizeTaskFrame(self.task_to_edit),
             'invert': InvertTaskFrame(self.task_to_edit),
+            'flip': FlipTaskFrame(self.task_to_edit),
             'convert': ConvertTaskFrame(self.task_to_edit),
             'compress': CompressTaskFrame(self.task_to_edit),
             'color_detection': ColorDetectionTaskFrame(self.task_to_edit),

@@ -5,8 +5,8 @@ from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
 from models.sort import Sort
 
 
-class ErrorDialog(QDialog):
-    def __init__(self, title: str, error: str):
+class InfoDialog(QDialog):
+    def __init__(self, title: str, text: str):
         super().__init__()
         if not self.objectName():
             self.setObjectName(u"self")
@@ -23,7 +23,7 @@ class ErrorDialog(QDialog):
 
         # Error label
         self.error_label = QLabel()
-        self.error_label.setText(error)
+        self.error_label.setText(text)
         self.vertical_layout.addWidget(self.error_label)
 
         self.button_box = QDialogButtonBox(self)

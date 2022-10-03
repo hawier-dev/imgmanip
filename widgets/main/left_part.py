@@ -128,6 +128,7 @@ class LeftPart(QVBoxLayout):
         modification_time = os.path.getmtime(file_name)
         modification_time = datetime.fromtimestamp(modification_time).strftime('%Y-%m-%d %H:%M:%S')
         image_mode = img.mode
+        mode_to_bpp = {'1': 1, 'L': 8, 'P': 8, 'RGB': 24, 'RGBA': 32, 'CMYK': 32, 'YCbCr': 24, 'I': 32, 'F': 32}
 
         exif_tags = {}
 
@@ -143,6 +144,7 @@ class LeftPart(QVBoxLayout):
         self.properties_list.addItem(f'Width: {width}')
         self.properties_list.addItem(f'Height: {height}')
         self.properties_list.addItem(f'Mode: {image_mode}')
+        self.properties_list.addItem(f'Bit depth: {mode_to_bpp[image_mode]}')
         # EXIF
         for exif_tag in exif_tags:
             if exif_tag not in ignored_exif_list:
