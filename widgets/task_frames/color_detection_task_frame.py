@@ -11,7 +11,7 @@ class ColorDetectionTaskFrame(QFrame):
         if task and type(task) == ColorDetectionTask:
             self.task = task
         else:
-            self.task = ColorDetectionTask('', '', True, False, False)
+            self.task = ColorDetectionTask(save_mask=True, save_shp=False, save_geojson=False)
 
         self.description_label = QLabel()
         self.description_label.setText(
@@ -30,6 +30,11 @@ class ColorDetectionTaskFrame(QFrame):
         self.color_picker_button = QPushButton()
         self.color_picker_button.setText('Pick color')
         self.color_picker_button.clicked.connect(self.color_picker)
+
+        if task:
+            if task.color:
+                self.color_picker_button.setText(f'RGB: {task.color}')
+
         # Save mask
         self.save_mask_checkbox = QCheckBox()
         self.save_mask_checkbox.setText('Save image mask')
@@ -64,5 +69,6 @@ class ColorDetectionTaskFrame(QFrame):
     # Pick color
     def color_picker(self):
         color = QColorDialog.getColor()
-        self.color_picker_button.setStyleSheet(f"background-color: {color.name}")
-        print(color.getRgb())
+        selected_color = [color.getRgb()[0], color.getRgb()[1], color.getRgb()[2]]
+        self.color_picker_button.setText(f'RGB: {selected_color}')
+        self.task.color = selected_color

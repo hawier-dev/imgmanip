@@ -9,7 +9,7 @@ from models.task import ConvertTask
 def convert_image(image, convert_task: ConvertTask, overwrite):
     img = Image.open(image)
     new_image = image.replace(get_ext_from_file(image), convert_task.convert_ext.value)
-    new_image_name = image.replace(get_ext_from_file(image), '_new' + convert_task.convert_ext.value)
+    new_image_name = image.replace(get_ext_from_file(image), '_new' + str(convert_task.convert_ext.value))
 
     # Overwrite old files
     if overwrite:

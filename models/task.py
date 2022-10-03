@@ -39,7 +39,7 @@ class CompressTask(Task):
 
 
 class ColorDetectionTask(Task):
-    def __init__(self, from_color: str, color: str, save_mask: bool, save_shp: bool, save_geojson: bool):
+    def __init__(self, save_mask: bool, save_shp: bool, save_geojson: bool, color=None):
         super().__init__()
         self.name = 'color_detection'
         self.color = color

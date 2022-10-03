@@ -1,5 +1,7 @@
 import os
 import sys
+import time
+import numpy as np
 
 import pyperclip
 from PIL import Image
@@ -10,11 +12,12 @@ from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
                                QDialog, QMenuBar)
 
 from dialogs.confirm_dialog import ConfirmDialog
-from dialogs.error_dialog import ErrorDialog
+from dialogs.info_dialog import InfoDialog
 from dialogs.rename_dialog import RenameDialog
 from functions.color_detection import detect_color
 from functions.compress import compress_image
 from functions.convert import convert_image
+from functions.create_time_str import create_time_str
 from functions.flip import flip_image
 from functions.invert import invert_image
 from functions.resize import resize_image
@@ -189,16 +192,18 @@ class UiMainWindow(QWidget):
 
     # Start tasks
     def start_tasks(self):
+        start_time = time.time()
+
         # If no image added
         if not self.left_part.list_of_images:
-            error_dialog = ErrorDialog(title='Start tasks',
-                                       error='You need to select at least one image.')
+            error_dialog = InfoDialog(title='Start tasks',
+                                      text='You need to select at least one image.')
             if error_dialog.exec_() == QDialog.Accepted:
                 return
         # If no task added
         if not self.right_part.list_of_tasks:
-            error_dialog = ErrorDialog(title='Start tasks',
-                                       error='You need to select at least one task.')
+            error_dialog = InfoDialog(title='Start tasks',
+                                      text='You need to select at least one task.')
             if error_dialog.exec_() == QDialog.Accepted:
                 return
 
@@ -224,9 +229,17 @@ class UiMainWindow(QWidget):
         images_list = [self.left_part.images_list.item(index).text() for index in
                        range(self.left_part.images_list.count())]
 
+        one_element_time = 1
         for index in range(len(images_list)):
             image = images_list[index]
+            images_count = len(images_list[index:])
+            one_element_start_time = time.time()
+            time_left = create_time_str('', one_element_time * images_count)
+
             self.center_part.progress.setValue(progress)
+
+            self.center_part.progress.setFormat(f'{self.center_part.progress.value()}% Time left:{time_left}')
+
             for task in self.right_part.list_of_tasks:
                 # RESIZE TASK
                 if type(task) == ResizeTask:
@@ -258,6 +271,7 @@ class UiMainWindow(QWidget):
 
                 self.left_part.images_list.setCurrentRow(index)
                 self.preview_image(image)
+                one_element_time = time.time() - one_element_start_time
 
             progress = (index / len(images_list)) * 100
             if progress > 55:
@@ -266,3 +280,11 @@ class UiMainWindow(QWidget):
         self.center_part.progress.setStyleSheet('color: white')
         self.center_part.progress.setVisible(False)
         self.center_part.start_button.setVisible(True)
+
+        end_time = time.time()
+
+        done_text = f'Done in:'
+        done_text = create_time_str(done_text, end_time - start_time)
+
+        time_dialog = InfoDialog(title='Done', text=done_text)
+        time_dialog.exec()
