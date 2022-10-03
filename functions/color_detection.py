@@ -9,9 +9,9 @@ from models.task import ColorDetectionTask
 def detect_color(image, task: ColorDetectionTask, overwrite):
     img = cv2.imread(image)
     # From color
-    lower = np.array(task.from_color, dtype="uint8")
+    lower = np.array(task.color, dtype="uint8")
     # To color
-    upper = np.array(task.to_color, dtype="uint8")
+    upper = np.array(task.color, dtype="uint8")
     # Mask with color
     mask = cv2.inRange(img, lower, upper)
     image_ext = get_ext_from_file(image)

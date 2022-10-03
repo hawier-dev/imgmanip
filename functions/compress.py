@@ -10,8 +10,14 @@ def compress_image(image, compress_task: CompressTask, overwrite):
     new_image_name = image.replace(image_ext, f'_new{image_ext}')
 
     if overwrite:
-        img.save(image, optimize=True, quality=compress_task.quality)
+        if image_ext == '.jpg' or image_ext == '.jpeg':
+            img.save(image, 'JPEG', quality=compress_task.quality)
+        else:
+            img.save(image, optimize=True, quality=compress_task.quality)
         return image
 
-    img.save(new_image_name, optimize=True, quality=compress_task.quality)
+    if image_ext == '.jpg' or image_ext == '.jpeg':
+        img.save(new_image_name, 'JPEG', quality=compress_task.quality)
+    else:
+        img.save(new_image_name, optimize=True, quality=compress_task.quality)
     return new_image_name

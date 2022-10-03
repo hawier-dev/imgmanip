@@ -12,11 +12,13 @@ from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
 from dialogs.confirm_dialog import ConfirmDialog
 from dialogs.error_dialog import ErrorDialog
 from dialogs.rename_dialog import RenameDialog
+from functions.color_detection import detect_color
 from functions.compress import compress_image
 from functions.convert import convert_image
+from functions.flip import flip_image
 from functions.invert import invert_image
 from functions.resize import resize_image
-from models.task import ResizeTask, InvertTask, ConvertTask, CompressTask
+from models.task import ResizeTask, InvertTask, ConvertTask, CompressTask, ColorDetectionTask, FlipTask
 from widgets.main.center_part import CenterPart
 from widgets.main.left_part import LeftPart
 from widgets.main.right_part import RightPart
@@ -234,6 +236,10 @@ class UiMainWindow(QWidget):
                 elif type(task) == InvertTask:
                     file_name = invert_image(image, task, self.right_part.overwrite_checkbox.isChecked())
                     image = file_name
+                # FLIP TASK
+                elif type(task) == FlipTask:
+                    file_name = flip_image(image, task, self.right_part.overwrite_checkbox.isChecked())
+                    image = file_name
                 # CONVERT TASK
                 elif type(task) == ConvertTask:
                     file_name = convert_image(image, task, self.right_part.overwrite_checkbox.isChecked())
@@ -244,6 +250,10 @@ class UiMainWindow(QWidget):
                 # COMPRESS TASK
                 elif type(task) == CompressTask:
                     file_name = compress_image(image, task, self.right_part.overwrite_checkbox.isChecked())
+                    image = file_name
+                # COLOR DETECTION TASK
+                elif type(task) == ColorDetectionTask:
+                    file_name = detect_color(image, task, self.right_part.overwrite_checkbox.isChecked())
                     image = file_name
 
                 self.left_part.images_list.setCurrentRow(index)

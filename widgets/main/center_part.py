@@ -2,6 +2,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QCursor
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QProgressBar, QHBoxLayout, QGraphicsPixmapItem, QGraphicsView, \
     QGraphicsScene
+from matplotlib import image as mpimg
+import pyqtgraph as pg
 
 
 class CenterPart(QVBoxLayout):
