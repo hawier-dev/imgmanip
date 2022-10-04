@@ -1,23 +1,23 @@
+from os.path import basename
+
 import cv2
 from PIL import Image, ImageOps
 
 from functions.get_ext import get_ext_from_file
+from functions.save_img import save_image_path
 from models.axis import Axis
+from models.save_type import SaveType
 from models.task import FlipTask
 
 
-def flip_image(image, flip_task: FlipTask, overwrite):
+def flip_image(image, flip_task: FlipTask, save_type: SaveType, out_path=None):
     img = Image.open(image)
     if flip_task.axis == Axis.HORIZONTAL:
         img = ImageOps.mirror(img)
     elif flip_task.axis == Axis.VERTICAL:
         img = ImageOps.flip(img)
-    image_ext = get_ext_from_file(image)
-    new_image_name = image.replace(image_ext, f'_new{image_ext}')
 
-    if overwrite:
-        img.save(image)
-        return image
+    new_file_name = save_image_path(image_path=image, save_type=save_type, out_path=out_path)
 
-    img.save(new_image_name)
-    return new_image_name
+    img.save(new_file_name)
+    return new_file_name

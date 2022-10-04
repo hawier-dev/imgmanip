@@ -21,6 +21,7 @@ from functions.create_time_str import create_time_str
 from functions.flip import flip_image
 from functions.invert import invert_image
 from functions.resize import resize_image
+from models.save_type import SaveType
 from models.task import ResizeTask, InvertTask, ConvertTask, CompressTask, ColorDetectionTask, FlipTask
 from widgets.main.center_part import CenterPart
 from widgets.main.left_part import LeftPart
@@ -207,8 +208,18 @@ class UiMainWindow(QWidget):
             if error_dialog.exec_() == QDialog.Accepted:
                 return
 
+        # If no path selected
+        if not os.path.exists(
+                self.right_part.path_input.text()) \
+                and \
+                self.right_part.save_type_picker.currentText() == SaveType.SELECT_PATH.value:
+
+            error_dialog = InfoDialog(title='Start tasks',
+                                      text='You need to select valid path.')
+            if error_dialog.exec_() == QDialog.Accepted:
+                return
         # Overwrite warning
-        if self.right_part.overwrite_checkbox.isChecked():
+        if self.right_part.save_type_picker.currentText() == SaveType.OVERWRITE.value:
             confirm_delete = ConfirmDialog(title='Start tasks',
                                            desc='This process will overwrite all selected files!\nAre you sure?')
             if confirm_delete.exec_() == QDialog.Accepted:
@@ -216,7 +227,7 @@ class UiMainWindow(QWidget):
             else:
                 confirm_delete.close()
                 return
-        self.center_part.start_button.setVisible(False)
+        self.center_part.start_button.setText('Stop')
         self.center_part.progress.setVisible(True)
 
         try:
@@ -243,34 +254,40 @@ class UiMainWindow(QWidget):
             for task in self.right_part.list_of_tasks:
                 # RESIZE TASK
                 if type(task) == ResizeTask:
-                    file_name = resize_image(image, task, self.right_part.overwrite_checkbox.isChecked())
+                    file_name = resize_image(image, task, SaveType(self.right_part.save_type_picker.currentText()),
+                                             self.right_part.path_input.text())
                     image = file_name
                 # INVERT TASK
                 elif type(task) == InvertTask:
-                    file_name = invert_image(image, task, self.right_part.overwrite_checkbox.isChecked())
+                    file_name = invert_image(image, task, SaveType(self.right_part.save_type_picker.currentText()),
+                                             self.right_part.path_input.text())
                     image = file_name
                 # FLIP TASK
                 elif type(task) == FlipTask:
-                    file_name = flip_image(image, task, self.right_part.overwrite_checkbox.isChecked())
+                    file_name = flip_image(image, task, SaveType(self.right_part.save_type_picker.currentText()),
+                                           self.right_part.path_input.text())
                     image = file_name
                 # CONVERT TASK
                 elif type(task) == ConvertTask:
-                    file_name = convert_image(image, task, self.right_part.overwrite_checkbox.isChecked())
+                    file_name = convert_image(image, task, SaveType(self.right_part.save_type_picker.currentText()),
+                                              self.right_part.path_input.text())
                     image = file_name
-                    if self.right_part.overwrite_checkbox.isChecked():
+                    if self.right_part.save_type_picker.currentText() == SaveType.OVERWRITE.value:
                         self.left_part.images_list.item(index).setText(file_name)
                         self.left_part.list_of_images[index] = file_name
                 # COMPRESS TASK
                 elif type(task) == CompressTask:
-                    file_name = compress_image(image, task, self.right_part.overwrite_checkbox.isChecked())
+                    file_name = compress_image(image, task, SaveType(self.right_part.save_type_picker.currentText()),
+                                               self.right_part.path_input.text())
                     image = file_name
                 # COLOR DETECTION TASK
                 elif type(task) == ColorDetectionTask:
-                    file_name = detect_color(image, task, self.right_part.overwrite_checkbox.isChecked())
+                    file_name = detect_color(image, task, SaveType(self.right_part.save_type_picker.currentText()),
+                                             self.right_part.path_input.text())
                     image = file_name
 
-                self.left_part.images_list.setCurrentRow(index)
-                self.preview_image(image)
+                # self.left_part.images_list.setCurrentRow(index)
+                # self.preview_image(image)
                 one_element_time = time.time() - one_element_start_time
 
             progress = (index / len(images_list)) * 100
@@ -279,7 +296,7 @@ class UiMainWindow(QWidget):
 
         self.center_part.progress.setStyleSheet('color: white')
         self.center_part.progress.setVisible(False)
-        self.center_part.start_button.setVisible(True)
+        self.center_part.start_button.setText('Start')
 
         end_time = time.time()
 

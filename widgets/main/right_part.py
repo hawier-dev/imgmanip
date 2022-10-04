@@ -1,9 +1,13 @@
+import plyer
 from PySide6 import QtWidgets
 from PySide6.QtGui import QCursor, Qt, QFont
-from PySide6.QtWidgets import QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPushButton, QCheckBox, QDialog
+from PySide6.QtWidgets import QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPushButton, QCheckBox, QDialog, QComboBox, \
+    QFrame, QLineEdit
 
 from dialogs.new_task_dialog import NewTaskDialog
+from models.save_type import SaveType
 from models.task import ResizeTask, InvertTask, ConvertTask, CompressTask
+from plyer import filechooser
 
 
 class RightPart(QVBoxLayout):
@@ -54,15 +58,58 @@ class RightPart(QVBoxLayout):
         self.tasks_buttons_h_box.addWidget(self.add_task_button)
         self.tasks_buttons_h_box.addWidget(self.edit_task_button)
         self.tasks_buttons_h_box.addWidget(self.remove_task_button)
-        # Overwrite checkbox
-        self.overwrite_checkbox = QCheckBox()
-        self.overwrite_checkbox.setText('Overwrite')
-        self.overwrite_checkbox.setChecked(False)
+        # # Overwrite checkbox
+        # self.overwrite_checkbox = QCheckBox()
+        # self.overwrite_checkbox.setText('Overwrite')
+        # self.overwrite_checkbox.setChecked(False)
+
+        # Save type label
+        self.save_path_label = QLabel()
+        self.save_path_label.setText('Save path')
+
+        # Save type picker
+        self.save_type_picker = QComboBox()
+        for save_type in SaveType:
+            self.save_type_picker.addItem(save_type.value)
+        self.save_type_picker.currentTextChanged.connect(self.change_save_type)
+
+        self.path_select_box = QFrame()
+        self.path_select_box.setMaximumWidth(300)
+        self.path_select_h_box = QHBoxLayout()
+        self.path_select_h_box.setContentsMargins(0, 0, 0, 0)
+        self.path_input = QLineEdit()
+        self.path_input.setObjectName(u"path_label")
+        self.path_input.setText('None')
+
+        self.path_pick_button = QPushButton()
+        self.path_pick_button.setText('Select path')
+        self.path_pick_button.clicked.connect(self.select_save_path)
+
+        self.path_select_h_box.addWidget(self.path_input)
+        self.path_select_h_box.addWidget(self.path_pick_button)
+        self.path_select_box.setLayout(self.path_select_h_box)
+
         # Adding widgets to right part
         self.addWidget(self.tasks_label)
         self.addWidget(self.tasks_list)
-        self.addWidget(self.overwrite_checkbox)
+        self.addWidget(self.save_path_label)
+        self.addWidget(self.save_type_picker)
+        self.addWidget(self.path_select_box)
         self.addLayout(self.tasks_buttons_h_box)
+
+        self.change_save_type()
+
+    # Save type
+    def change_save_type(self):
+        if self.save_type_picker.currentText() == SaveType.SELECT_PATH.value:
+            self.path_select_box.show()
+        else:
+            self.path_select_box.hide()
+
+    # Select path to save the image
+    def select_save_path(self):
+        out_path = filechooser.choose_dir()
+        self.path_input.setText(out_path[0])
 
     # Edit task
     def edit_task(self):
