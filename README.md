@@ -1,5 +1,3 @@
-# imgmanip
-
 Image manipulation tool written in python in
 which you can select a large number of photos and
 perform a lot of different operations on them.
