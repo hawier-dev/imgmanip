@@ -5,6 +5,5 @@ pillow~=9.2.0
 natsort~=8.2.0
 pyqtdarktheme
 pyperclip~=1.8.2
-enum34~=1.1.10
 plyer~=2.0.0
 Shapely~=1.8.4
