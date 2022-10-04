@@ -1,7 +1,8 @@
+import multiprocessing
 import os
 import sys
 import time
-import numpy as np
+from functools import partial
 
 import pyperclip
 from PIL import Image
@@ -14,20 +15,15 @@ from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
 from dialogs.confirm_dialog import ConfirmDialog
 from dialogs.info_dialog import InfoDialog
 from dialogs.rename_dialog import RenameDialog
-from functions.color_detection import detect_color
-from functions.compress import compress_image
-from functions.convert import convert_image
 from functions.create_time_str import create_time_str
-from functions.flip import flip_image
-from functions.invert import invert_image
-from functions.resize import resize_image
+from functions.run_tasks import run_task
 from models.save_type import SaveType
-from models.task import ResizeTask, InvertTask, ConvertTask, CompressTask, ColorDetectionTask, FlipTask
 from widgets.main.center_part import CenterPart
 from widgets.main.left_part import LeftPart
 from widgets.main.right_part import RightPart
 
 Image.MAX_IMAGE_PIXELS = 933120000
+cpu_count = int(multiprocessing.cpu_count() * 2 / 3)
 
 platform_path = '/'
 if sys.platform == 'win32':
@@ -236,63 +232,26 @@ class UiMainWindow(QWidget):
         except IndexError:
             pass
 
-        progress = 0
         images_list = [self.left_part.images_list.item(index).text() for index in
                        range(self.left_part.images_list.count())]
 
-        one_element_time = 1
-        for index in range(len(images_list)):
-            image = images_list[index]
-            images_count = len(images_list[index:])
-            one_element_start_time = time.time()
-            time_left = create_time_str('', one_element_time * images_count)
+        # Multiprocessing
+        pool = multiprocessing.Pool(processes=cpu_count)
+        run_func = partial(run_task, images_list=images_list,
+                           list_of_tasks=self.right_part.list_of_tasks,
+                           save_type=SaveType(self.right_part.save_type_picker.currentText()),
+                           out_path=self.right_part.path_input.text())
+        jobs = []
+        job_count = 0
 
+        for job in pool.imap_unordered(run_func, range(len(images_list))):
+            jobs.append(job)
+            job_count += 1
+            progress = (job_count / len(images_list)) * 100
             self.center_part.progress.setValue(progress)
 
-            self.center_part.progress.setFormat(f'{self.center_part.progress.value()}% Time left:{time_left}')
-
-            for task in self.right_part.list_of_tasks:
-                # RESIZE TASK
-                if type(task) == ResizeTask:
-                    file_name = resize_image(image, task, SaveType(self.right_part.save_type_picker.currentText()),
-                                             self.right_part.path_input.text())
-                    image = file_name
-                # INVERT TASK
-                elif type(task) == InvertTask:
-                    file_name = invert_image(image, task, SaveType(self.right_part.save_type_picker.currentText()),
-                                             self.right_part.path_input.text())
-                    image = file_name
-                # FLIP TASK
-                elif type(task) == FlipTask:
-                    file_name = flip_image(image, task, SaveType(self.right_part.save_type_picker.currentText()),
-                                           self.right_part.path_input.text())
-                    image = file_name
-                # CONVERT TASK
-                elif type(task) == ConvertTask:
-                    file_name = convert_image(image, task, SaveType(self.right_part.save_type_picker.currentText()),
-                                              self.right_part.path_input.text())
-                    image = file_name
-                    if self.right_part.save_type_picker.currentText() == SaveType.OVERWRITE.value:
-                        self.left_part.images_list.item(index).setText(file_name)
-                        self.left_part.list_of_images[index] = file_name
-                # COMPRESS TASK
-                elif type(task) == CompressTask:
-                    file_name = compress_image(image, task, SaveType(self.right_part.save_type_picker.currentText()),
-                                               self.right_part.path_input.text())
-                    image = file_name
-                # COLOR DETECTION TASK
-                elif type(task) == ColorDetectionTask:
-                    file_name = detect_color(image, task, SaveType(self.right_part.save_type_picker.currentText()),
-                                             self.right_part.path_input.text())
-                    image = file_name
-
-                # self.left_part.images_list.setCurrentRow(index)
-                # self.preview_image(image)
-                one_element_time = time.time() - one_element_start_time
-
-            progress = (index / len(images_list)) * 100
-            if progress > 55:
-                self.center_part.progress.setStyleSheet('color: #111111')
+        # print(res)
+        pool.close()
 
         self.center_part.progress.setStyleSheet('color: white')
         self.center_part.progress.setVisible(False)
