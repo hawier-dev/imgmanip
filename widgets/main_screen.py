@@ -2,6 +2,7 @@ import multiprocessing
 import os
 import sys
 import time
+import config
 from functools import partial
 
 import pyperclip
@@ -14,6 +15,7 @@ from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
 
 from dialogs.confirm_dialog import ConfirmDialog
 from dialogs.info_dialog import InfoDialog
+from dialogs.preferences_dialog import PreferencesDialog
 from dialogs.rename_dialog import RenameDialog
 from functions.create_time_str import create_time_str
 from functions.run_tasks import run_task
@@ -23,7 +25,7 @@ from widgets.main.left_part import LeftPart
 from widgets.main.right_part import RightPart
 
 Image.MAX_IMAGE_PIXELS = 933120000
-cpu_count = int(multiprocessing.cpu_count() * 2 / 3)
+cpu_count = multiprocessing.cpu_count()
 
 platform_path = '/'
 if sys.platform == 'win32':
@@ -38,11 +40,14 @@ class UiMainWindow(QWidget):
             main_window.setObjectName(u"MainWindow")
         main_window.resize(1000, 600)
         main_window.setWindowTitle('IMGManip')
+        self.config = config.read_config()
+
         # main_window.setMaximumHeight(600)
         self.main_window = main_window
 
         # Creating FILE actions
-        self.new_action = QAction("&New", self)
+        self.preferences_action = QAction("&Preferences", self)
+        self.preferences_action.triggered.connect(self.open_preferences)
         self.exit_action = QAction("&Exit", self)
         self.exit_action.triggered.connect(self.exit_tool)
         # Creating EDIT actions
@@ -78,20 +83,29 @@ class UiMainWindow(QWidget):
 
         QMetaObject.connectSlotsByName(main_window)
 
+    # Create menu bar
     def create_menu_bar(self):
         menu_bar = QMenuBar(self)
         # Creating menus
         file_menu = menu_bar.addMenu("&File")
         view_menu = menu_bar.addMenu("&View")
 
-        file_menu.addAction(self.new_action)
+        file_menu.addAction(self.preferences_action)
         file_menu.addAction(self.exit_action)
         view_menu.addAction(self.fit_in_view_action)
 
         self.main_window.setMenuBar(menu_bar)
 
+    # Open preferences dialog
+    def open_preferences(self):
+        preferences_dialog = PreferencesDialog(self.config)
+        if preferences_dialog.exec_() == QDialog.Accepted:
+            self.config = preferences_dialog.config
+            config.write_config(preferences_dialog.config)
+
     # Exit tool
-    def exit_tool(self):
+    @staticmethod
+    def exit_tool():
         sys.exit()
 
     # Menus on right click
@@ -243,14 +257,14 @@ class UiMainWindow(QWidget):
                            out_path=self.right_part.path_input.text())
         jobs = []
         job_count = 0
-
-        for job in pool.imap_unordered(run_func, range(len(images_list))):
+        images_count = len(images_list)
+        for job in pool.imap_unordered(run_func, range(images_count)):
             jobs.append(job)
             job_count += 1
-            progress = (job_count / len(images_list)) * 100
+            progress = round((job_count / len(images_list)) * 100, 1)
             self.center_part.progress.setValue(progress)
+            self.center_part.progress.setFormat(f'{progress}% {job_count}/{images_count}')
 
-        # print(res)
         pool.close()
 
         self.center_part.progress.setStyleSheet('color: white')
