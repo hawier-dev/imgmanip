@@ -18,7 +18,7 @@ class ConvertTaskFrame(QFrame):
 
         self.description_label = QLabel()
         self.description_label.setText(
-            "This task convert the image to other format.")
+            "This task converts the image to the other format.")
 
         self.convert_box.setObjectName(u"convert_box")
         self.convert_box.setSizeConstraint(QLayout.SetDefaultConstraint)

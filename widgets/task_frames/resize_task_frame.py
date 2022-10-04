@@ -21,7 +21,7 @@ class ResizeTaskFrame(QFrame):
 
         self.description_label = QLabel()
         self.description_label.setText(
-            "This task resizes the images to the given resolution.")
+            "This task resizes the images to the given resolution or by percentage.")
 
         # Resize types
         self.resize_type_picker = QComboBox()

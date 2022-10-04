@@ -18,7 +18,7 @@ class FlipTaskFrame(QFrame):
         self.flip_box = QVBoxLayout()
 
         self.description_label = QLabel()
-        self.description_label.setText("This task flips the image.")
+        self.description_label.setText("This task flips the image in horizontal or vertical axis.")
 
         self.flip_box.setObjectName(u"flip_box")
         self.flip_box.setSizeConstraint(QLayout.SetDefaultConstraint)
