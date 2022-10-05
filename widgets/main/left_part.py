@@ -13,7 +13,7 @@ from natsort import natsorted
 from plyer import filechooser
 
 from dialogs.sort_images_dialog import SortImagesDialog
-from file_size import file_size
+from functions.file_size import file_size
 from models.sort import Sort
 
 
