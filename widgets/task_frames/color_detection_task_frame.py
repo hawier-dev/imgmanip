@@ -17,9 +17,9 @@ class ColorDetectionTaskFrame(QFrame):
         self.description_label.setText(
             "This task marks where the given color appears in the image."
             "\n"
-            "Additionally, it can save the mask in .png "
+            "Additionally, it can save the mask in .png format, "
             "\n"
-            "format, shapefile file and geojson file."
+            "shapefile and geojson file."
         )
 
         self.color_detection_frame = QFrame()
@@ -31,7 +31,7 @@ class ColorDetectionTaskFrame(QFrame):
         self.color_picker_button.setText('Pick color')
         self.color_picker_button.clicked.connect(self.color_picker)
 
-        if task:
+        if task and type(task) == ColorDetectionTask:
             if task.color:
                 self.color_picker_button.setText(f'RGB: {task.color}')
 

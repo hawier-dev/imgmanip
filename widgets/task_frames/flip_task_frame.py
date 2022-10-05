@@ -1,7 +1,7 @@
-from PySide6.QtWidgets import QWidget, QFrame, QVBoxLayout, QLayout, QLabel, QComboBox
+from PySide6.QtWidgets import QFrame, QVBoxLayout, QLayout, QLabel, QComboBox
 
 from models.axis import Axis
-from models.task import InvertTask, FlipTask
+from models.task import FlipTask
 from widgets.horizontal_line import HorizontalLine
 
 
@@ -18,7 +18,7 @@ class FlipTaskFrame(QFrame):
         self.flip_box = QVBoxLayout()
 
         self.description_label = QLabel()
-        self.description_label.setText("This task flips the image.")
+        self.description_label.setText("This task flips the image in horizontal or vertical axis.")
 
         self.flip_box.setObjectName(u"flip_box")
         self.flip_box.setSizeConstraint(QLayout.SetDefaultConstraint)

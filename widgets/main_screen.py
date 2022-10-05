@@ -1,7 +1,10 @@
+import multiprocessing
 import os
 import sys
 import time
-import numpy as np
+import config
+from functools import partial
+import webbrowser
 
 import pyperclip
 from PIL import Image
@@ -13,20 +16,17 @@ from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
 
 from dialogs.confirm_dialog import ConfirmDialog
 from dialogs.info_dialog import InfoDialog
+from dialogs.preferences_dialog import PreferencesDialog
 from dialogs.rename_dialog import RenameDialog
-from functions.color_detection import detect_color
-from functions.compress import compress_image
-from functions.convert import convert_image
 from functions.create_time_str import create_time_str
-from functions.flip import flip_image
-from functions.invert import invert_image
-from functions.resize import resize_image
-from models.task import ResizeTask, InvertTask, ConvertTask, CompressTask, ColorDetectionTask, FlipTask
+from functions.run_tasks import run_task
+from models.save_type import SaveType
 from widgets.main.center_part import CenterPart
 from widgets.main.left_part import LeftPart
 from widgets.main.right_part import RightPart
 
 Image.MAX_IMAGE_PIXELS = 933120000
+cpu_count = multiprocessing.cpu_count()
 
 platform_path = '/'
 if sys.platform == 'win32':
@@ -41,11 +41,14 @@ class UiMainWindow(QWidget):
             main_window.setObjectName(u"MainWindow")
         main_window.resize(1000, 600)
         main_window.setWindowTitle('IMGManip')
+        self.config = config.read_config()
+
         # main_window.setMaximumHeight(600)
         self.main_window = main_window
 
         # Creating FILE actions
-        self.new_action = QAction("&New", self)
+        self.preferences_action = QAction("&Preferences", self)
+        self.preferences_action.triggered.connect(self.open_preferences)
         self.exit_action = QAction("&Exit", self)
         self.exit_action.triggered.connect(self.exit_tool)
         # Creating EDIT actions
@@ -81,20 +84,29 @@ class UiMainWindow(QWidget):
 
         QMetaObject.connectSlotsByName(main_window)
 
+    # Create menu bar
     def create_menu_bar(self):
         menu_bar = QMenuBar(self)
         # Creating menus
         file_menu = menu_bar.addMenu("&File")
         view_menu = menu_bar.addMenu("&View")
 
-        file_menu.addAction(self.new_action)
+        file_menu.addAction(self.preferences_action)
         file_menu.addAction(self.exit_action)
         view_menu.addAction(self.fit_in_view_action)
 
         self.main_window.setMenuBar(menu_bar)
 
+    # Open preferences dialog
+    def open_preferences(self):
+        preferences_dialog = PreferencesDialog(self.config)
+        if preferences_dialog.exec_() == QDialog.Accepted:
+            self.config = preferences_dialog.config
+            config.write_config(preferences_dialog.config)
+
     # Exit tool
-    def exit_tool(self):
+    @staticmethod
+    def exit_tool():
         sys.exit()
 
     # Menus on right click
@@ -105,6 +117,7 @@ class UiMainWindow(QWidget):
             # Menu for every item
             menu = QtWidgets.QMenu()
             menu.addAction('Copy path')
+            menu.addAction('Open containing folder')
             menu.addAction('Rename')
             menu.addAction('Remove')
             menu.addAction('Remove from disk')
@@ -116,6 +129,9 @@ class UiMainWindow(QWidget):
                     # COPY PATH
                     if action.toolTip() == 'Copy path':
                         pyperclip.copy(item.text())
+                    # OPEN CONTAINING FOLDER
+                    elif action.toolTip() == 'Open containing folder':
+                        webbrowser.open(os.path.dirname(item.text()))
                     # RENAME IMAGE FILE
                     elif action.toolTip() == 'Rename':
                         rename_dialog = RenameDialog(old_name=item.text())
@@ -207,8 +223,18 @@ class UiMainWindow(QWidget):
             if error_dialog.exec_() == QDialog.Accepted:
                 return
 
+        # If no path selected
+        if not os.path.exists(
+                self.right_part.path_input.text()) \
+                and \
+                self.right_part.save_type_picker.currentText() == SaveType.SELECT_PATH.value:
+
+            error_dialog = InfoDialog(title='Start tasks',
+                                      text='You need to select valid path.')
+            if error_dialog.exec_() == QDialog.Accepted:
+                return
         # Overwrite warning
-        if self.right_part.overwrite_checkbox.isChecked():
+        if self.right_part.save_type_picker.currentText() == SaveType.OVERWRITE.value:
             confirm_delete = ConfirmDialog(title='Start tasks',
                                            desc='This process will overwrite all selected files!\nAre you sure?')
             if confirm_delete.exec_() == QDialog.Accepted:
@@ -216,7 +242,7 @@ class UiMainWindow(QWidget):
             else:
                 confirm_delete.close()
                 return
-        self.center_part.start_button.setVisible(False)
+        self.center_part.start_button.setText('Stop')
         self.center_part.progress.setVisible(True)
 
         try:
@@ -225,61 +251,30 @@ class UiMainWindow(QWidget):
         except IndexError:
             pass
 
-        progress = 0
         images_list = [self.left_part.images_list.item(index).text() for index in
                        range(self.left_part.images_list.count())]
 
-        one_element_time = 1
-        for index in range(len(images_list)):
-            image = images_list[index]
-            images_count = len(images_list[index:])
-            one_element_start_time = time.time()
-            time_left = create_time_str('', one_element_time * images_count)
-
+        # Multiprocessing
+        pool = multiprocessing.Pool(processes=cpu_count)
+        run_func = partial(run_task, images_list=images_list,
+                           list_of_tasks=self.right_part.list_of_tasks,
+                           save_type=SaveType(self.right_part.save_type_picker.currentText()),
+                           out_path=self.right_part.path_input.text())
+        jobs = []
+        job_count = 0
+        images_count = len(images_list)
+        for job in pool.imap_unordered(run_func, range(images_count)):
+            jobs.append(job)
+            job_count += 1
+            progress = round((job_count / len(images_list)) * 100, 1)
             self.center_part.progress.setValue(progress)
+            self.center_part.progress.setFormat(f'{progress}% {job_count}/{images_count}')
 
-            self.center_part.progress.setFormat(f'{self.center_part.progress.value()}% Time left:{time_left}')
-
-            for task in self.right_part.list_of_tasks:
-                # RESIZE TASK
-                if type(task) == ResizeTask:
-                    file_name = resize_image(image, task, self.right_part.overwrite_checkbox.isChecked())
-                    image = file_name
-                # INVERT TASK
-                elif type(task) == InvertTask:
-                    file_name = invert_image(image, task, self.right_part.overwrite_checkbox.isChecked())
-                    image = file_name
-                # FLIP TASK
-                elif type(task) == FlipTask:
-                    file_name = flip_image(image, task, self.right_part.overwrite_checkbox.isChecked())
-                    image = file_name
-                # CONVERT TASK
-                elif type(task) == ConvertTask:
-                    file_name = convert_image(image, task, self.right_part.overwrite_checkbox.isChecked())
-                    image = file_name
-                    if self.right_part.overwrite_checkbox.isChecked():
-                        self.left_part.images_list.item(index).setText(file_name)
-                        self.left_part.list_of_images[index] = file_name
-                # COMPRESS TASK
-                elif type(task) == CompressTask:
-                    file_name = compress_image(image, task, self.right_part.overwrite_checkbox.isChecked())
-                    image = file_name
-                # COLOR DETECTION TASK
-                elif type(task) == ColorDetectionTask:
-                    file_name = detect_color(image, task, self.right_part.overwrite_checkbox.isChecked())
-                    image = file_name
-
-                self.left_part.images_list.setCurrentRow(index)
-                self.preview_image(image)
-                one_element_time = time.time() - one_element_start_time
-
-            progress = (index / len(images_list)) * 100
-            if progress > 55:
-                self.center_part.progress.setStyleSheet('color: #111111')
+        pool.close()
 
         self.center_part.progress.setStyleSheet('color: white')
         self.center_part.progress.setVisible(False)
-        self.center_part.start_button.setVisible(True)
+        self.center_part.start_button.setText('Start')
 
         end_time = time.time()
 

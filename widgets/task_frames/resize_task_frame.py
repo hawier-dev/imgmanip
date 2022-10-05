@@ -21,7 +21,7 @@ class ResizeTaskFrame(QFrame):
 
         self.description_label = QLabel()
         self.description_label.setText(
-            "This task resizes the images to the given resolution.")
+            "This task resizes the images to the given resolution or by percentage.")
 
         # Resize types
         self.resize_type_picker = QComboBox()
@@ -48,6 +48,7 @@ class ResizeTaskFrame(QFrame):
         self.resize_size_frame = QFrame()
         self.resize_size_frame.setContentsMargins(0, 0, 0, 0)
         self.resize_inputs_h_box = QHBoxLayout()
+        self.resize_inputs_h_box.setContentsMargins(0, 0, 0, 0)
         self.resize_width_input = QLineEdit(self)
         self.resize_width_input.setObjectName(u"resize_width_input")
         self.resize_width_input.setText(str(self.task.new_width))
@@ -73,6 +74,7 @@ class ResizeTaskFrame(QFrame):
         self.resize_percentage_frame = QFrame()
         self.resize_percentage_frame.setContentsMargins(0, 0, 0, 0)
         self.resize_percentage_h_box = QHBoxLayout()
+        self.resize_percentage_h_box.setContentsMargins(0, 0, 0, 0)
         self.percentage_input = QLineEdit(self)
         self.percentage_input.setObjectName(u"percentage_input")
         self.percentage_input.setText(str(self.task.percent))
