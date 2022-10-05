@@ -43,7 +43,7 @@ class LeftPart(QVBoxLayout):
         self.images_list.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.images_list.setStyleSheet(
             'QListView::item:selected{background-color: #99A2FF; color: #111111; font-weight: bold}')
-        self.images_list.itemSelectionChanged.connect(self.root_widget.preview_image)
+        # self.images_list.itemSelectionChanged.connect(self.root_widget.preview_image)
         self.images_list.setFont(self.default_list_font)
         self.images_list.setMaximumWidth(300)
         self.images_list.installEventFilter(self)

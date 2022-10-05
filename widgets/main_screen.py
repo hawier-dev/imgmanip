@@ -69,6 +69,7 @@ class UiMainWindow(QWidget):
 
         self.left_part = LeftPart(self)
         self.left_part.images_list.installEventFilter(self)
+        self.left_part.images_list.itemClicked.connect(self.preview_image)
         self.left_part.properties_list.installEventFilter(self)
 
         self.center_part = CenterPart(self)
@@ -179,11 +180,12 @@ class UiMainWindow(QWidget):
 
     # Preview image
     def preview_image(self, file_name=None):
+        file_name = file_name.text()
         if file_name:
             try:
                 pix = QPixmap(file_name)
                 self.left_part.generate_image_properties(file_name)
-            except IndexError:
+            except IndexError or TypeError:
                 pix = QPixmap(self.left_part.images_list.item(0).text())
                 self.left_part.generate_image_properties(self.left_part.images_list.item(0).text())
         else:
