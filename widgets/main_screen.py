@@ -141,7 +141,7 @@ class UiMainWindow(QWidget):
                             self.left_part.list_of_images[self.left_part.list_of_images.index(item.text())] = new_name
                             os.rename(item.text(), new_name)
                             self.left_part.sort_images()
-                            self.preview_image()
+                            self.preview_image(item)
                         else:
                             rename_dialog.close()
 
@@ -179,8 +179,8 @@ class UiMainWindow(QWidget):
         return super(UiMainWindow, self).eventFilter(source, event)
 
     # Preview image
-    def preview_image(self, file_name=None):
-        file_name = file_name.text()
+    def preview_image(self, item):
+        file_name = item.text()
         if file_name:
             try:
                 pix = QPixmap(file_name)
