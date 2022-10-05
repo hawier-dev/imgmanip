@@ -1,8 +1,5 @@
-from os.path import basename
-
 import cv2
 
-from functions.get_ext import get_ext_from_file
 from functions.save_img import save_image_path
 from models.save_type import SaveType
 from models.task import InvertTask

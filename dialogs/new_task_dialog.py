@@ -98,7 +98,7 @@ class NewTaskDialog(QDialog):
         for task in self.tasks:
             self.tasks[task].hide()
 
-        self.tasks[self.task_picker.currentText()].show()
+        self.tasks[selected_task].show()
         self.setFixedSize(self.sizeHint())
 
     # Edit dialog

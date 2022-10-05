@@ -1,6 +1,6 @@
-from PySide6.QtCore import (QMetaObject, Qt, QSize)
+from PySide6.QtCore import (QMetaObject, Qt)
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
-                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QLineEdit)
+                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLineEdit)
 
 
 class RenameDialog(QDialog):

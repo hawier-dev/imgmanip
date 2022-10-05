@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QLayout, QVBoxLayout, QFrame, QComboBox, QLabel
+from PySide6.QtWidgets import QLayout, QVBoxLayout, QFrame, QComboBox, QLabel
 
 from models.image_extension import ImageExtension
 from models.task import ConvertTask

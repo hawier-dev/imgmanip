@@ -3,9 +3,7 @@ import multiprocessing
 from PySide6.QtCore import (QMetaObject, Qt)
 from PySide6.QtGui import QIntValidator, QFont
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
-                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QComboBox, QFrame, QLineEdit)
-
-from models.sort import Sort
+                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QLineEdit)
 
 
 class PreferencesDialog(QDialog):

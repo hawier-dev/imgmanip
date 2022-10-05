@@ -1,8 +1,6 @@
 from PySide6.QtCore import (QMetaObject, Qt)
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
-                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QComboBox, QFrame)
-
-from models.sort import Sort
+                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel)
 
 
 class InfoDialog(QDialog):

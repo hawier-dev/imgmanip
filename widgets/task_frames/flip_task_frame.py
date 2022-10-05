@@ -1,7 +1,7 @@
-from PySide6.QtWidgets import QWidget, QFrame, QVBoxLayout, QLayout, QLabel, QComboBox
+from PySide6.QtWidgets import QFrame, QVBoxLayout, QLayout, QLabel, QComboBox
 
 from models.axis import Axis
-from models.task import InvertTask, FlipTask
+from models.task import FlipTask
 from widgets.horizontal_line import HorizontalLine
 
 

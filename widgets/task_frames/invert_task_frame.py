@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QFrame, QVBoxLayout, QLayout, QLabel
+from PySide6.QtWidgets import QFrame, QVBoxLayout, QLayout, QLabel
 
 from models.task import InvertTask
 from widgets.horizontal_line import HorizontalLine

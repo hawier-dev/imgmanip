@@ -1,13 +1,11 @@
-import plyer
 from PySide6 import QtWidgets
 from PySide6.QtGui import QCursor, Qt, QFont
-from PySide6.QtWidgets import QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPushButton, QCheckBox, QDialog, QComboBox, \
+from PySide6.QtWidgets import QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPushButton, QDialog, QComboBox, \
     QFrame, QLineEdit
+from plyer import filechooser
 
 from dialogs.new_task_dialog import NewTaskDialog
 from models.save_type import SaveType
-from models.task import ResizeTask, InvertTask, ConvertTask, CompressTask
-from plyer import filechooser
 
 
 class RightPart(QVBoxLayout):
@@ -58,10 +56,6 @@ class RightPart(QVBoxLayout):
         self.tasks_buttons_h_box.addWidget(self.add_task_button)
         self.tasks_buttons_h_box.addWidget(self.edit_task_button)
         self.tasks_buttons_h_box.addWidget(self.remove_task_button)
-        # # Overwrite checkbox
-        # self.overwrite_checkbox = QCheckBox()
-        # self.overwrite_checkbox.setText('Overwrite')
-        # self.overwrite_checkbox.setChecked(False)
 
         # Save type label
         self.save_path_label = QLabel()
