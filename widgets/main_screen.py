@@ -4,6 +4,7 @@ import sys
 import time
 import config
 from functools import partial
+import webbrowser
 
 import pyperclip
 from PIL import Image
@@ -116,6 +117,7 @@ class UiMainWindow(QWidget):
             # Menu for every item
             menu = QtWidgets.QMenu()
             menu.addAction('Copy path')
+            menu.addAction('Open containing folder')
             menu.addAction('Rename')
             menu.addAction('Remove')
             menu.addAction('Remove from disk')
@@ -127,6 +129,9 @@ class UiMainWindow(QWidget):
                     # COPY PATH
                     if action.toolTip() == 'Copy path':
                         pyperclip.copy(item.text())
+                    # OPEN CONTAINING FOLDER
+                    elif action.toolTip() == 'Open containing folder':
+                        webbrowser.open(os.path.dirname(item.text()))
                     # RENAME IMAGE FILE
                     elif action.toolTip() == 'Rename':
                         rename_dialog = RenameDialog(old_name=item.text())
