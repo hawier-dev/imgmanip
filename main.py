@@ -2,6 +2,7 @@ import os
 import sys
 
 from PySide6 import QtGui
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow, QApplication
 
 from widgets.main_screen import UiMainWindow
@@ -21,6 +22,7 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyleSheet(qdarktheme.load_stylesheet())
+    app.setAttribute(Qt.AA_DontUseNativeDialogs)
 
     window = MainWindow()
     window.show()

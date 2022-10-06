@@ -10,7 +10,7 @@ import pyperclip
 from PIL import Image
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import (QMetaObject)
-from PySide6.QtGui import (QPixmap, QAction)
+from PySide6.QtGui import (QPixmap, QAction, QFont)
 from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
                                QDialog, QMenuBar)
 
@@ -69,12 +69,12 @@ class UiMainWindow(QWidget):
 
         self.left_part = LeftPart(self)
         self.left_part.images_list.installEventFilter(self)
-        self.left_part.images_list.itemClicked.connect(self.preview_image)
+        # self.left_part.images_list.itemClicked.connect(self.preview_image)
         self.left_part.images_list.itemActivated.connect(self.preview_image)
         self.left_part.properties_list.installEventFilter(self)
 
         self.center_part = CenterPart(self)
-        self.right_part = RightPart()
+        self.right_part = RightPart(self)
         # Adding parts to the main widget (main_h_layout)
         self.main_h_layout.addLayout(self.left_part)
         self.main_h_layout.addLayout(self.center_part)

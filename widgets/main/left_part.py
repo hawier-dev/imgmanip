@@ -2,15 +2,15 @@ import os
 import re
 from datetime import datetime
 from os.path import basename
+from pathlib import Path
 
 from PIL import Image
 from PIL.ExifTags import TAGS
 from PySide6 import QtWidgets
 from PySide6.QtGui import QCursor, Qt, QFont
 from PySide6.QtWidgets import QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPushButton, QDialog, \
-    QSizePolicy
+    QSizePolicy, QFileDialog
 from natsort import natsorted
-from plyer import filechooser
 
 from dialogs.sort_images_dialog import SortImagesDialog
 from functions.file_size import file_size
@@ -31,6 +31,9 @@ class LeftPart(QVBoxLayout):
         self.default_list_font = QFont()
         self.default_list_font.setPixelSize(13)
 
+        smaller_font = QFont()
+        smaller_font.setPixelSize(12)
+
         self.setObjectName(u"left_vbox")
 
         # "Images" text
@@ -47,6 +50,10 @@ class LeftPart(QVBoxLayout):
         self.images_list.setFont(self.default_list_font)
         self.images_list.setMaximumWidth(300)
         self.images_list.installEventFilter(self)
+        # Images count
+        self.images_count_label = QLabel()
+        self.images_count_label.setFont(smaller_font)
+        self.images_count_label.setText(f'Images count: {len(self.list_of_images)}')
         # Properties of the image
         self.properties_list = QListWidget()
         self.properties_list.setObjectName(u"properties_list")
@@ -92,13 +99,18 @@ class LeftPart(QVBoxLayout):
         # Adding widgets to left part
         self.addWidget(self.images_label)
         self.addWidget(self.images_list)
+        self.addWidget(self.images_count_label)
         self.addWidget(self.properties_list)
         self.addLayout(self.images_buttons_h_box)
 
     # Open file dialog
     def pick_files(self):
-        selected_files = filechooser.open_file(multiple=True,
-                                               filters=[('Image files', '*.png', '*.jpg', '*.jpeg', '*.tif')])
+        file_dialog = QFileDialog()
+        selected_files = file_dialog.getOpenFileNames(self.root_widget, 'Open files',
+                                                      str(Path.home()) + '/Downloads/kagglecatsanddogs_5340/PetImages/Cat',
+                                                      'Image files (*.png *.jpg *.jpeg *.tif)', )
+        selected_files = selected_files[0]
+
         if selected_files:
             for file in selected_files:
                 if os.path.isfile(file):
@@ -106,6 +118,7 @@ class LeftPart(QVBoxLayout):
                         self.list_of_images.append(file)
 
         self.sort_images()
+        self.images_count_label.setText(f'Images count: {len(self.list_of_images)}')
 
     # Display properties of the image
     def generate_image_properties(self, file_name):
@@ -210,3 +223,5 @@ class LeftPart(QVBoxLayout):
 
             if self.images_list.count() == 0:
                 self.properties_list.clear()
+
+        self.images_count_label.setText(f'Images count: {len(self.list_of_images)}')

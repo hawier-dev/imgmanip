@@ -1,21 +1,21 @@
 from PySide6 import QtWidgets
 from PySide6.QtGui import QCursor, Qt, QFont
 from PySide6.QtWidgets import QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPushButton, QDialog, QComboBox, \
-    QFrame, QLineEdit
-from plyer import filechooser
+    QFrame, QLineEdit, QFileDialog
 
 from dialogs.new_task_dialog import NewTaskDialog
 from models.save_type import SaveType
 
 
 class RightPart(QVBoxLayout):
-    def __init__(self):
+    def __init__(self, root_widget):
         # Right part
 
         super().__init__()
         self.list_of_tasks = []
 
         self.setObjectName(u"right_vbox")
+        self.root_widget = root_widget
 
         self.default_list_font = QFont()
         self.default_list_font.setPixelSize(13)
@@ -102,8 +102,8 @@ class RightPart(QVBoxLayout):
 
     # Select path to save the image
     def select_save_path(self):
-        out_path = filechooser.choose_dir()
-        self.path_input.setText(out_path[0])
+        select_save_path = QFileDialog.getExistingDirectory(self.root_widget, 'Open directory')
+        self.path_input.setText(select_save_path)
 
     # Edit task
     def edit_task(self):
