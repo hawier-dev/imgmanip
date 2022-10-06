@@ -247,11 +247,11 @@ class UiMainWindow(QWidget):
         self.center_part.start_button.setText('Stop')
         self.center_part.progress.setVisible(True)
 
-        try:
-            self.left_part.images_list.setCurrentRow(0)
-            self.preview_image(self.left_part.images_list.item(0).text())
-        except IndexError:
-            pass
+        # try:
+        #     self.left_part.images_list.setCurrentRow(0)
+        #     self.preview_image(self.left_part.images_list.item(0).text())
+        # except IndexError:
+        #     pass
 
         images_list = [self.left_part.images_list.item(index).text() for index in
                        range(self.left_part.images_list.count())]
