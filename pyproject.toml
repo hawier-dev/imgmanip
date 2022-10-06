@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "imgmanip"
+version = "0.0.3"
+description = "Image manipulation tool written in python in which you can select a large number of photos and perform a lot of different operations on them."
+authors = ["Mikołaj Badyl <contact@hawier.dev>"]
+readme = "README.md"
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+PySide6 = "^6.3.2"
+natsort = "^8.2.0"
+numpy = "^1.23.3"
+Pillow = "^9.2.0"
+opencv-python = "^4.6.0.66"
+pyqtdarktheme = "^1.1.0"
+PyYAML = "^6.0"
+pyperclip = "^1.8.2"
+
+[tool.poetry.scripts]
+imgmanip = "imgmanip.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=ImgManip
+GenericName=ImgManip
+Exec=/usr/bin/imgmanip
+TryExec=/usr/bin/imgmanip
+Icon=image
+Categories=Graphics;2DGraphics;RasterGraphics;GTK;
