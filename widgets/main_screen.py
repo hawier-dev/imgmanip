@@ -2,6 +2,8 @@ import multiprocessing
 import os
 import sys
 import time
+from pathlib import Path
+
 import config
 from functools import partial
 import webbrowser
@@ -10,7 +12,7 @@ import pyperclip
 from PIL import Image
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import (QMetaObject)
-from PySide6.QtGui import (QPixmap, QAction, QFont)
+from PySide6.QtGui import (QPixmap, QAction)
 from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
                                QDialog, QMenuBar, QFileDialog)
 
@@ -284,8 +286,10 @@ class UiMainWindow(QWidget):
                                             desc=f"Could not process {len(error_images)} files. \n"
                                                  "Do you want to save a text file with the names of this files?")
             if save_log_dialog.exec_() == QDialog.Accepted:
-                txt_file = QFileDialog.getSaveFileName(self, 'Save text file', 'error-images.txt', 'Text file (*.txt)')
-                save_images_names_to_txt(error_images, txt_file[0])
+                txt_file = QFileDialog.getSaveFileName(self, 'Save text file', str(Path.home()) + '/error-images.txt',
+                                                       'Text file (*.txt)')
+                if txt_file[0] != '':
+                    save_images_names_to_txt(error_images, txt_file[0])
 
         self.center_part.progress.setStyleSheet('color: white')
         self.center_part.progress.setVisible(False)
