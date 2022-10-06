@@ -70,6 +70,7 @@ class UiMainWindow(QWidget):
         self.left_part = LeftPart(self)
         self.left_part.images_list.installEventFilter(self)
         self.left_part.images_list.itemClicked.connect(self.preview_image)
+        self.left_part.images_list.itemActivated.connect(self.preview_image)
         self.left_part.properties_list.installEventFilter(self)
 
         self.center_part = CenterPart(self)
@@ -257,7 +258,7 @@ class UiMainWindow(QWidget):
                        range(self.left_part.images_list.count())]
 
         # Multiprocessing
-        pool = multiprocessing.Pool(processes=cpu_count)
+        pool = multiprocessing.Pool(processes=self.config['cpu_count'])
         run_func = partial(run_task, images_list=images_list,
                            list_of_tasks=self.right_part.list_of_tasks,
                            save_type=SaveType(self.right_part.save_type_picker.currentText()),
