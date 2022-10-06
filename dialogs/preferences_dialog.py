@@ -3,7 +3,7 @@ import multiprocessing
 from PySide6.QtCore import (QMetaObject, Qt)
 from PySide6.QtGui import QIntValidator, QFont
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
-                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QLineEdit)
+                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QLineEdit, QCheckBox)
 
 
 class PreferencesDialog(QDialog):
@@ -39,9 +39,15 @@ class PreferencesDialog(QDialog):
         self.cpu_count_input.textChanged.connect(self.value_changed)
         self.cpu_count_input.setValidator(int_validator)
 
+        self.only_image_name_checkbox = QCheckBox()
+        self.only_image_name_checkbox.setChecked(self.config['only_image_name'])
+        self.only_image_name_checkbox.stateChanged.connect(self.value_changed)
+        self.only_image_name_checkbox.setText('Show images names without full path.')
+
         self.vertical_layout.addWidget(self.cpu_count_label)
         self.vertical_layout.addWidget(self.cpu_count_input)
         self.vertical_layout.addWidget(self.cpu_max_label)
+        self.vertical_layout.addWidget(self.only_image_name_checkbox)
 
         self.button_box = QDialogButtonBox(self)
         self.button_box.setObjectName(u"button_box")
@@ -67,6 +73,7 @@ class PreferencesDialog(QDialog):
     def value_changed(self):
         try:
             cpu_count = int(self.cpu_count_input.text().strip())
+            self.config['only_image_name'] = self.only_image_name_checkbox.isChecked()
             if cpu_count > self.cpu_count_max:
                 self.cpu_count_input.setText(str(self.config['cpu_count']))
             else:

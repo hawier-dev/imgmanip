@@ -106,6 +106,7 @@ class UiMainWindow(QWidget):
         if preferences_dialog.exec_() == QDialog.Accepted:
             self.config = preferences_dialog.config
             config.write_config(preferences_dialog.config)
+            self.left_part.sort_images()
 
     # Exit tool
     @staticmethod
