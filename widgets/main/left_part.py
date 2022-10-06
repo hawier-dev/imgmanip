@@ -108,7 +108,7 @@ class LeftPart(QVBoxLayout):
         file_dialog = QFileDialog()
         selected_files = file_dialog.getOpenFileNames(self.root_widget, 'Open files',
                                                       str(Path.home()),
-                                                      'Image files (*.png *.jpg *.jpeg *.tif)', )
+                                                      'Image files (*.png *.jpg *.jpeg *.tif *.gif)', )
         selected_files = selected_files[0]
 
         if selected_files:
