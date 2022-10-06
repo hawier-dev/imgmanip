@@ -16,4 +16,6 @@ The current list of operations
   **shapefile** and **geojson** file.
 - **Convert** - converts the image to the other format.
 
-**Work in progress**
+## How to use
+
+![how_to_use](assets/how_to_use.gif)
