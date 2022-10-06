@@ -107,7 +107,7 @@ class LeftPart(QVBoxLayout):
     def pick_files(self):
         file_dialog = QFileDialog()
         selected_files = file_dialog.getOpenFileNames(self.root_widget, 'Open files',
-                                                      str(Path.home()) + '/Downloads/kagglecatsanddogs_5340/PetImages/Cat',
+                                                      str(Path.home()),
                                                       'Image files (*.png *.jpg *.jpeg *.tif)', )
         selected_files = selected_files[0]
 

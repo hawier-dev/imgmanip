@@ -12,7 +12,7 @@ from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import (QMetaObject)
 from PySide6.QtGui import (QPixmap, QAction, QFont)
 from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
-                               QDialog, QMenuBar)
+                               QDialog, QMenuBar, QFileDialog)
 
 from dialogs.confirm_dialog import ConfirmDialog
 from dialogs.info_dialog import InfoDialog
@@ -20,6 +20,7 @@ from dialogs.preferences_dialog import PreferencesDialog
 from dialogs.rename_dialog import RenameDialog
 from functions.create_time_str import create_time_str
 from functions.run_tasks import run_task
+from logs import save_images_names_to_txt
 from models.save_type import SaveType
 from widgets.main.center_part import CenterPart
 from widgets.main.left_part import LeftPart
@@ -274,12 +275,20 @@ class UiMainWindow(QWidget):
             self.center_part.progress.setFormat(f'{progress}% {job_count}/{images_count}')
 
         pool.close()
+        end_time = time.time()
+
+        error_images = [ele for ele in jobs if ele is not None]
+        if error_images:
+            save_log_dialog = ConfirmDialog(title=f'Could not process {len(error_images)} files',
+                                            desc=f"Could not process {len(error_images)} files. \n"
+                                                 "Do you want to save a text file with the names of this files?")
+            if save_log_dialog.exec_() == QDialog.Accepted:
+                txt_file = QFileDialog.getSaveFileName(self, 'Save text file', 'error-images.txt', 'Text file (*.txt)')
+                save_images_names_to_txt(error_images, txt_file[0])
 
         self.center_part.progress.setStyleSheet('color: white')
         self.center_part.progress.setVisible(False)
         self.center_part.start_button.setText('Start')
-
-        end_time = time.time()
 
         done_text = f'Done in:'
         done_text = create_time_str(done_text, end_time - start_time)
