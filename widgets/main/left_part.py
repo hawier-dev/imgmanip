@@ -187,9 +187,6 @@ class LeftPart(QVBoxLayout):
             new_images_list = self.list_of_images
             new_images_list = natsorted(new_images_list)
 
-        if self.root_widget.config['only_image_name']:
-            new_images_list = [os.path.basename(image) for image in new_images_list]
-
         self.images_list.clear()
         self.images_list.addItems(new_images_list)
 
