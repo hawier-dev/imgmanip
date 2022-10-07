@@ -33,7 +33,7 @@ class RenameDialog(QDialog):
         size_policy3.setHeightForWidth(self.button_box.sizePolicy().hasHeightForWidth())
         self.button_box.setSizePolicy(size_policy3)
         self.button_box.setOrientation(Qt.Horizontal)
-        self.button_box.setStandardButtons(QDialogButtonBox.Cancel | QDialogButtonBox.Yes)
+        self.button_box.setStandardButtons(QDialogButtonBox.Cancel | QDialogButtonBox.Save)
         self.button_box.setCenterButtons(True)
 
         self.grid_layout.addLayout(self.vertical_layout, 0, 0, 1, 1)

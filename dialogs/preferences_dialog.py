@@ -42,7 +42,6 @@ class PreferencesDialog(QDialog):
         self.vertical_layout.addWidget(self.cpu_count_label)
         self.vertical_layout.addWidget(self.cpu_count_input)
         self.vertical_layout.addWidget(self.cpu_max_label)
-        self.vertical_layout.addWidget(self.only_image_name_checkbox)
 
         self.button_box = QDialogButtonBox(self)
         self.button_box.setObjectName(u"button_box")

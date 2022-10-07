@@ -11,7 +11,7 @@ import webbrowser
 import pyperclip
 from PIL import Image
 from PySide6 import QtCore, QtWidgets
-from PySide6.QtCore import (QMetaObject)
+from PySide6.QtCore import (QMetaObject, Qt)
 from PySide6.QtGui import (QPixmap, QAction)
 from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
                                QDialog, QMenuBar, QFileDialog)
@@ -146,7 +146,7 @@ class UiMainWindow(QWidget):
                             self.left_part.list_of_images[self.left_part.list_of_images.index(item.text())] = new_name
                             os.rename(item.text(), new_name)
                             self.left_part.sort_images()
-                            self.preview_image(item)
+                            self.preview_image(self.left_part.images_list.findItems(new_name, Qt.MatchContains)[0])
                         else:
                             rename_dialog.close()
 
