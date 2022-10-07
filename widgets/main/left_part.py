@@ -161,7 +161,8 @@ class LeftPart(QVBoxLayout):
         # EXIF
         for exif_tag in exif_tags:
             if exif_tag not in ignored_exif_list:
-                exif_tag_split = re.sub(r"(\w)([A-Z])", r"\1 \2", str(exif_tag))
+                pattern = re.compile(r'((?<=[^\W[A-Z])[A-Z]|(?<=\S)[A-Z](?=[a-z]))')
+                exif_tag_split = pattern.sub(r' \1', str(exif_tag))
                 self.properties_list.addItem(f'{exif_tag_split}: {exif_tags[exif_tag]}')
 
     def pick_sort_type(self):
