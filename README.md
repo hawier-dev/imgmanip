@@ -12,8 +12,16 @@ pip install imgmanip
 
 ### If you want the program to be displayed in the system applications menu. (Linux only)
 
+#### For user
+
 ```shell
 curl https://raw.githubusercontent.com/hawier-dev/imgmanip/develop/imgmanip.desktop > ~/.local/share/applications/imgmanip.desktop
+```
+
+#### For all users
+
+```shell
+sudo curl https://raw.githubusercontent.com/hawier-dev/imgmanip/develop/imgmanip.desktop > /usr/share/applications/imgmanip.desktop
 ```
 
 The current list of operations
