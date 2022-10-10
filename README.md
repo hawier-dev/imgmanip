@@ -21,7 +21,8 @@ curl https://raw.githubusercontent.com/hawier-dev/imgmanip/develop/imgmanip.desk
 #### For all users
 
 ```shell
-sudo curl https://raw.githubusercontent.com/hawier-dev/imgmanip/develop/imgmanip.desktop > /usr/share/applications/imgmanip.desktop
+curl https://raw.githubusercontent.com/hawier-dev/imgmanip/develop/imgmanip.desktop > ./imgmanip.desktop
+sudo mv ./imgmanip.desktop /usr/share/applications/imgmanip.desktop
 ```
 
 The current list of operations
