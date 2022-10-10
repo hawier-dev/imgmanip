@@ -1,5 +1,6 @@
-Image manipulation tool written in python in
-which you can select a large number of photos and
+Image manipulation tool written in python.
+
+Image manipulation tool in which you can select a large number of photos and
 perform a lot of different operations on them.
 ---
 
@@ -9,6 +10,12 @@ perform a lot of different operations on them.
 
 ```shell
 pip install imgmanip
+```
+
+### If you want the program to be displayed in the system applications menu.
+
+```shell
+
 ```
 
 The current list of operations
