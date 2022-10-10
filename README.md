@@ -33,6 +33,5 @@ The current list of operations
 - **Invert** - inverts the colors of the image.
 - **Flip** - flips the image in horizontal or vertical axis.
 - **Color detection** - marks where the given color appears in the image.
-  Additionally, it can save the **mask** in .png format,
-  **shapefile** and **geojson** file.
+  Additionally, it can save the **mask** in .png format.
 - **Convert** - converts the image to the other format.
