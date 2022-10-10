@@ -2,6 +2,15 @@ Image manipulation tool written in python in
 which you can select a large number of photos and
 perform a lot of different operations on them.
 ---
+
+## Installation
+
+### Install from PyPI
+
+```shell
+pip install imgmanip
+```
+
 The current list of operations
 
 - **Resize** - resizes the images to the given resolution or by a specified percentage.
