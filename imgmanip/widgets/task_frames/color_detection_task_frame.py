@@ -11,7 +11,7 @@ class ColorDetectionTaskFrame(QFrame):
         if task and type(task) == ColorDetectionTask:
             self.task = task
         else:
-            self.task = ColorDetectionTask(save_mask=True, save_shp=False, save_geojson=False)
+            self.task = ColorDetectionTask(save_mask=True)
 
         self.description_label = QLabel()
         self.description_label.setText(
@@ -40,31 +40,17 @@ class ColorDetectionTaskFrame(QFrame):
         self.save_mask_checkbox.setText('Save image mask')
         self.save_mask_checkbox.setChecked(self.task.save_mask)
         self.save_mask_checkbox.stateChanged.connect(self.change_values)
-        # Save SHAPEFILE
-        self.save_shp_checkbox = QCheckBox()
-        self.save_shp_checkbox.setText('Save shapefile(.shp) file')
-        self.save_shp_checkbox.setChecked(self.task.save_shp)
-        self.save_shp_checkbox.stateChanged.connect(self.change_values)
-        # Save GEOJSON
-        self.save_geojson_checkbox = QCheckBox()
-        self.save_geojson_checkbox.setText('Save geojson file')
-        self.save_geojson_checkbox.setChecked(self.task.save_geojson)
-        self.save_geojson_checkbox.stateChanged.connect(self.change_values)
 
         self.color_detection_box.addWidget(self.description_label)
         self.color_detection_box.addWidget(HorizontalLine())
         self.color_detection_box.addWidget(self.color_picker_button)
         self.color_detection_box.addWidget(self.save_mask_checkbox)
-        self.color_detection_box.addWidget(self.save_shp_checkbox)
-        self.color_detection_box.addWidget(self.save_geojson_checkbox)
         self.setLayout(self.color_detection_box)
         self.hide()
 
     # Change values
     def change_values(self):
         self.task.save_mask = self.save_mask_checkbox.isChecked()
-        self.task.save_shp = self.save_shp_checkbox.isChecked()
-        self.task.save_geojson = self.save_geojson_checkbox.isChecked()
 
     # Pick color
     def color_picker(self):

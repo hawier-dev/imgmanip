@@ -39,13 +39,11 @@ class CompressTask(Task):
 
 
 class ColorDetectionTask(Task):
-    def __init__(self, save_mask: bool, save_shp: bool, save_geojson: bool, color=None):
+    def __init__(self, save_mask: bool, color=None):
         super().__init__()
         self.name = 'color_detection'
         self.color = color
         self.save_mask = save_mask
-        self.save_shp = save_shp
-        self.save_geojson = save_geojson
 
 
 class FlipTask(Task):
