@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QFrame, QVBoxLayout, QCheckBox, QLayout, QLabel, QPushButton, QColorDialog
 
-from models.task import ColorDetectionTask
-from widgets.horizontal_line import HorizontalLine
+from imgmanip.models.task import ColorDetectionTask
+from imgmanip.widgets.horizontal_line import HorizontalLine
 
 
 class ColorDetectionTaskFrame(QFrame):

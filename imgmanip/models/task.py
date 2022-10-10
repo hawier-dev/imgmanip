@@ -1,6 +1,6 @@
-from models.axis import Axis
-from models.image_extension import ImageExtension
-from models.resize_type import ResizeType
+from imgmanip.models.axis import Axis
+from imgmanip.models.image_extension import ImageExtension
+from imgmanip.models.resize_type import ResizeType
 
 
 class Task:

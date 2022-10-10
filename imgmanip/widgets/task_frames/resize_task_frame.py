@@ -1,9 +1,9 @@
 from PySide6.QtGui import QIntValidator
 from PySide6.QtWidgets import QFrame, QVBoxLayout, QLabel, QSizePolicy, QHBoxLayout, QLineEdit, QLayout, QComboBox
 
-from models.resize_type import ResizeType
-from models.task import ResizeTask
-from widgets.horizontal_line import HorizontalLine
+from imgmanip.models.resize_type import ResizeType
+from imgmanip.models.task import ResizeTask
+from imgmanip.widgets.horizontal_line import HorizontalLine
 
 
 class ResizeTaskFrame(QFrame):

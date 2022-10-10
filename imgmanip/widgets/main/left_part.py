@@ -12,9 +12,9 @@ from PySide6.QtWidgets import QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPu
     QSizePolicy, QFileDialog
 from natsort import natsorted
 
-from dialogs.sort_images_dialog import SortImagesDialog
-from functions.file_size import file_size
-from models.sort import Sort
+from imgmanip.dialogs.sort_images_dialog import SortImagesDialog
+from imgmanip.functions.file_size import file_size
+from imgmanip.models.sort import Sort
 
 
 class LeftPart(QVBoxLayout):

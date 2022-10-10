@@ -1,8 +1,8 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFrame, QVBoxLayout, QLayout, QLabel, QHBoxLayout, QSlider
 
-from models.task import CompressTask
-from widgets.horizontal_line import HorizontalLine
+from imgmanip.models.task import CompressTask
+from imgmanip.widgets.horizontal_line import HorizontalLine
 
 
 class CompressTaskFrame(QFrame):

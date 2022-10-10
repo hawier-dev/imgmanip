@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QLayout, QVBoxLayout, QFrame, QComboBox, QLabel
 
-from models.image_extension import ImageExtension
-from models.task import ConvertTask
-from widgets.horizontal_line import HorizontalLine
+from imgmanip.models.image_extension import ImageExtension
+from imgmanip.models.task import ConvertTask
+from imgmanip.widgets.horizontal_line import HorizontalLine
 
 
 class ConvertTaskFrame(QFrame):

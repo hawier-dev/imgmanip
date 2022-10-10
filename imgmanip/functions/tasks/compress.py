@@ -2,10 +2,10 @@ from os.path import basename
 
 from PIL import Image
 
-from functions.get_ext import get_ext_from_file
-from functions.save_img import save_image_path
-from models.save_type import SaveType
-from models.task import CompressTask
+from imgmanip.functions.get_ext import get_ext_from_file
+from imgmanip.functions.save_img import save_image_path
+from imgmanip.models.save_type import SaveType
+from imgmanip.models.task import CompressTask
 
 
 def compress_image(image, compress_task: CompressTask, save_type: SaveType, out_path=None):

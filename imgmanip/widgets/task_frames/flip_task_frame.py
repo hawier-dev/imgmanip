@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QFrame, QVBoxLayout, QLayout, QLabel, QComboBox
 
-from models.axis import Axis
-from models.task import FlipTask
-from widgets.horizontal_line import HorizontalLine
+from imgmanip.models.axis import Axis
+from imgmanip.models.task import FlipTask
+from imgmanip.widgets.horizontal_line import HorizontalLine
 
 
 class FlipTaskFrame(QFrame):

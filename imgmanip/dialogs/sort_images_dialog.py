@@ -2,7 +2,7 @@ from PySide6.QtCore import (QMetaObject, Qt)
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
                                QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QComboBox, QFrame)
 
-from models.sort import Sort
+from imgmanip.models.sort import Sort
 
 
 class SortImagesDialog(QDialog):

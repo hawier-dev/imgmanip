@@ -3,8 +3,8 @@ from PySide6.QtGui import QCursor, Qt, QFont
 from PySide6.QtWidgets import QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPushButton, QDialog, QComboBox, \
     QFrame, QLineEdit, QFileDialog
 
-from dialogs.new_task_dialog import NewTaskDialog
-from models.save_type import SaveType
+from imgmanip.dialogs.new_task_dialog import NewTaskDialog
+from imgmanip.models.save_type import SaveType
 
 
 class RightPart(QVBoxLayout):

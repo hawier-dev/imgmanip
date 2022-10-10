@@ -3,9 +3,9 @@ from os.path import basename
 
 from PIL import Image
 
-from functions.get_ext import get_ext_from_file
-from models.save_type import SaveType
-from models.task import ConvertTask
+from imgmanip.functions.get_ext import get_ext_from_file
+from imgmanip.models.save_type import SaveType
+from imgmanip.models.task import ConvertTask
 
 
 def convert_image(image, convert_task: ConvertTask, save_type: SaveType, out_path=None):

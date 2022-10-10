@@ -4,7 +4,7 @@ import sys
 import time
 from pathlib import Path
 
-import config
+from imgmanip import config
 from functools import partial
 import webbrowser
 
@@ -16,17 +16,17 @@ from PySide6.QtGui import (QPixmap, QAction)
 from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
                                QDialog, QMenuBar, QFileDialog)
 
-from dialogs.confirm_dialog import ConfirmDialog
-from dialogs.info_dialog import InfoDialog
-from dialogs.preferences_dialog import PreferencesDialog
-from dialogs.rename_dialog import RenameDialog
-from functions.create_time_str import create_time_str
-from functions.run_tasks import run_task
-from logs import save_images_names_to_txt
-from models.save_type import SaveType
-from widgets.main.center_part import CenterPart
-from widgets.main.left_part import LeftPart
-from widgets.main.right_part import RightPart
+from imgmanip.dialogs.confirm_dialog import ConfirmDialog
+from imgmanip.dialogs.info_dialog import InfoDialog
+from imgmanip.dialogs.preferences_dialog import PreferencesDialog
+from imgmanip.dialogs.rename_dialog import RenameDialog
+from imgmanip.functions.create_time_str import create_time_str
+from imgmanip.functions.run_tasks import run_task
+from imgmanip.logs import save_images_names_to_txt
+from imgmanip.models.save_type import SaveType
+from imgmanip.widgets.main.center_part import CenterPart
+from imgmanip.widgets.main.left_part import LeftPart
+from imgmanip.widgets.main.right_part import RightPart
 
 Image.MAX_IMAGE_PIXELS = 933120000
 cpu_count = multiprocessing.cpu_count()

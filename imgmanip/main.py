@@ -5,7 +5,7 @@ from PySide6 import QtGui
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow, QApplication
 
-from widgets.main_screen import UiMainWindow
+from imgmanip.widgets.main_screen import UiMainWindow
 import qdarktheme
 
 os.environ['QT_IMAGEIO_MAXALLOC'] = "10000000000000000000000000000000000000000000000000000000000000000"
@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         self.ui = UiMainWindow(self)
 
 
-if __name__ == "__main__":
+def main():
     app = QApplication(sys.argv)
     app.setStyleSheet(qdarktheme.load_stylesheet())
     app.setAttribute(Qt.AA_DontUseNativeDialogs)

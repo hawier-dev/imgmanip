@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QFrame, QVBoxLayout, QLayout, QLabel
 
-from models.task import InvertTask
-from widgets.horizontal_line import HorizontalLine
+from imgmanip.models.task import InvertTask
+from imgmanip.widgets.horizontal_line import HorizontalLine
 
 
 class InvertTaskFrame(QFrame):

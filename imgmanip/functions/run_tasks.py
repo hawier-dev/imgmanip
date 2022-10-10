@@ -1,10 +1,10 @@
-from functions.tasks.color_detection import detect_color
-from functions.tasks.compress import compress_image
-from functions.tasks.convert import convert_image
-from functions.tasks.flip import flip_image
-from functions.tasks.invert import invert_image
-from functions.tasks.resize import resize_image
-from models.task import InvertTask, ResizeTask, FlipTask, ConvertTask, CompressTask, ColorDetectionTask
+from imgmanip.functions.tasks.color_detection import detect_color
+from imgmanip.functions.tasks.compress import compress_image
+from imgmanip.functions.tasks.convert import convert_image
+from imgmanip.functions.tasks.flip import flip_image
+from imgmanip.functions.tasks.invert import invert_image
+from imgmanip.functions.tasks.resize import resize_image
+from imgmanip.models.task import InvertTask, ResizeTask, FlipTask, ConvertTask, CompressTask, ColorDetectionTask
 
 
 def run_task(index, images_list, list_of_tasks, save_type, out_path):

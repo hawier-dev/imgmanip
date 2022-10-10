@@ -2,7 +2,7 @@
 name = "imgmanip"
 version = "0.0.1"
 description = "Image manipulation tool written in python in which you can select a large number of photos and perform a lot of different operations on them."
-authors = ["hawier-dev <contact@hawier.dev>"]
+authors = ["Mikołaj Badyl <contact@hawier.dev>"]
 readme = "README.md"
 license = "MIT"
 
@@ -19,6 +19,8 @@ pyperclip = "^1.8.2"
 geopandas = "^0.11.1"
 Shapely = "^1.8.4"
 
+[tool.poetry.scripts]
+imgmanip = "imgmanip.main:main"
 
 [build-system]
 requires = ["poetry-core"]

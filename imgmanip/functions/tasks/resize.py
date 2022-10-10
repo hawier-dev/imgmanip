@@ -1,9 +1,9 @@
 from PIL import Image
 
-from functions.save_img import save_image_path
-from models.resize_type import ResizeType
-from models.save_type import SaveType
-from models.task import ResizeTask
+from imgmanip.functions.save_img import save_image_path
+from imgmanip.models.resize_type import ResizeType
+from imgmanip.models.save_type import SaveType
+from imgmanip.models.task import ResizeTask
 
 
 def resize_image(image, resize_task: ResizeTask, save_type: SaveType, out_path=None):

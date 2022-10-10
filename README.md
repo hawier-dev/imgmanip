@@ -1,5 +1,3 @@
-![logo](assets/logo.png)
-
 Image manipulation tool written in python in
 which you can select a large number of photos and
 perform a lot of different operations on them.
@@ -15,7 +13,3 @@ The current list of operations
   Additionally, it can save the **mask** in .png format,
   **shapefile** and **geojson** file.
 - **Convert** - converts the image to the other format.
-
-## How to use
-
-![how_to_use](assets/how_to_use.gif)

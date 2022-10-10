@@ -1,10 +1,10 @@
 import cv2
 from PIL import Image
 
-from dialogs.confirm_dialog import ConfirmDialog
-from functions.save_img import save_image_path
-from models.save_type import SaveType
-from models.task import InvertTask
+from imgmanip.dialogs.confirm_dialog import ConfirmDialog
+from imgmanip.functions.save_img import save_image_path
+from imgmanip.models.save_type import SaveType
+from imgmanip.models.task import InvertTask
 
 
 def invert_image(image, invert_task: InvertTask, save_type: SaveType, out_path=None):

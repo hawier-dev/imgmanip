@@ -4,9 +4,10 @@ import cv2
 import numpy as np
 import geopandas as gpd
 from shapely.geometry import Polygon, MultiPolygon
-from functions.get_ext import get_ext_from_file
-from models.save_type import SaveType
-from models.task import ColorDetectionTask
+
+from imgmanip.functions.get_ext import get_ext_from_file
+from imgmanip.models.save_type import SaveType
+from imgmanip.models.task import ColorDetectionTask
 
 
 def detect_color(image, task: ColorDetectionTask, save_type: SaveType, out_path=None):

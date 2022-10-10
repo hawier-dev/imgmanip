@@ -1,9 +1,9 @@
 from PIL import Image, ImageOps
 
-from functions.save_img import save_image_path
-from models.axis import Axis
-from models.save_type import SaveType
-from models.task import FlipTask
+from imgmanip.functions.save_img import save_image_path
+from imgmanip.models.axis import Axis
+from imgmanip.models.save_type import SaveType
+from imgmanip.models.task import FlipTask
 
 
 def flip_image(image, flip_task: FlipTask, save_type: SaveType, out_path=None):

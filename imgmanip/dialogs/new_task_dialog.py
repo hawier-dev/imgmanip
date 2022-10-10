@@ -3,12 +3,12 @@ from PySide6.QtCore import (QMetaObject,
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
                                QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QComboBox, QFrame)
 
-from widgets.task_frames.color_detection_task_frame import ColorDetectionTaskFrame
-from widgets.task_frames.compress_task_frame import CompressTaskFrame
-from widgets.task_frames.convert_task_frame import ConvertTaskFrame
-from widgets.task_frames.flip_task_frame import FlipTaskFrame
-from widgets.task_frames.invert_task_frame import InvertTaskFrame
-from widgets.task_frames.resize_task_frame import ResizeTaskFrame
+from imgmanip.widgets.task_frames.color_detection_task_frame import ColorDetectionTaskFrame
+from imgmanip.widgets.task_frames.compress_task_frame import CompressTaskFrame
+from imgmanip.widgets.task_frames.convert_task_frame import ConvertTaskFrame
+from imgmanip.widgets.task_frames.flip_task_frame import FlipTaskFrame
+from imgmanip.widgets.task_frames.invert_task_frame import InvertTaskFrame
+from imgmanip.widgets.task_frames.resize_task_frame import ResizeTaskFrame
 
 
 class NewTaskDialog(QDialog):
