@@ -12,10 +12,10 @@ perform a lot of different operations on them.
 pip install imgmanip
 ```
 
-### If you want the program to be displayed in the system applications menu.
+### If you want the program to be displayed in the system applications menu. (Linux only)
 
 ```shell
-
+curl https://raw.githubusercontent.com/hawier-dev/imgmanip/develop/imgmanip.desktop > ~/.local/share/applications/imgmanip.desktop
 ```
 
 The current list of operations
