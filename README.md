@@ -28,3 +28,4 @@ The current list of operations
 - **Color detection** - marks where the given color appears in the image.
   Additionally, it can save the **mask** in .png format.
 - **Convert** - converts the image to the other format.
+- **Convert color mode** - This task marks convert the image to selected color mode.
