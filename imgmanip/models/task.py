@@ -1,4 +1,5 @@
 from imgmanip.models.axis import Axis
+from imgmanip.models.color_mode import ColorMode
 from imgmanip.models.image_extension import ImageExtension
 from imgmanip.models.resize_type import ResizeType
 
@@ -51,3 +52,10 @@ class FlipTask(Task):
         super().__init__()
         self.name = 'flip'
         self.axis = axis
+
+
+class ConvertColorModeTask(Task):
+    def __init__(self, color_mode=ColorMode):
+        super().__init__()
+        self.name = 'convert_color_mode'
+        self.color_mode = color_mode

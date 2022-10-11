@@ -9,6 +9,7 @@ from imgmanip.widgets.task_frames.convert_task_frame import ConvertTaskFrame
 from imgmanip.widgets.task_frames.flip_task_frame import FlipTaskFrame
 from imgmanip.widgets.task_frames.invert_task_frame import InvertTaskFrame
 from imgmanip.widgets.task_frames.resize_task_frame import ResizeTaskFrame
+from imgmanip.widgets.task_frames.convert_color_mode_task_frame import ConvertColorModeTaskFrame
 
 
 class NewTaskDialog(QDialog):
@@ -44,6 +45,7 @@ class NewTaskDialog(QDialog):
             'convert': ConvertTaskFrame(self.task_to_edit),
             'compress': CompressTaskFrame(self.task_to_edit),
             'color_detection': ColorDetectionTaskFrame(self.task_to_edit),
+            'convert_color_mode': ConvertColorModeTaskFrame(self.task_to_edit),
         }
 
         # Task input
