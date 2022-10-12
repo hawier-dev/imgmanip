@@ -17,12 +17,14 @@ class ResizeTask(Task):
         self.new_width = new_width
         self.new_height = new_height
         self.percent = percent
+        self.name_extended = f'Resize {new_width}x{new_height}'
 
 
 class InvertTask(Task):
     def __init__(self):
         super().__init__()
         self.name = 'invert'
+        self.name_extended = f'Invert'
 
 
 class ConvertTask(Task):
@@ -30,6 +32,7 @@ class ConvertTask(Task):
         super().__init__()
         self.name = 'convert'
         self.convert_ext = convert_ext
+        self.name_extended = f'Convert {convert_ext.value}'
 
 
 class CompressTask(Task):
@@ -37,6 +40,7 @@ class CompressTask(Task):
         super().__init__()
         self.name = 'compress'
         self.quality = quality
+        self.name_extended = f'Compress {quality}'
 
 
 class ColorDetectionTask(Task):
@@ -45,6 +49,7 @@ class ColorDetectionTask(Task):
         self.name = 'color_detection'
         self.color = color
         self.save_mask = save_mask
+        self.name_extended = f'Color detection {color}'
 
 
 class FlipTask(Task):
@@ -52,6 +57,7 @@ class FlipTask(Task):
         super().__init__()
         self.name = 'flip'
         self.axis = axis
+        self.name_extended = f'Flip {axis.value}'
 
 
 class ConvertColorModeTask(Task):
@@ -59,3 +65,4 @@ class ConvertColorModeTask(Task):
         super().__init__()
         self.name = 'convert_color_mode'
         self.color_mode = color_mode
+        self.name_extended = f'Convert color mode {color_mode.value}'

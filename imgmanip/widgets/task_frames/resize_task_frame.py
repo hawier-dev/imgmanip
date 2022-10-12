@@ -1,4 +1,4 @@
-from PySide6.QtGui import QIntValidator
+from PySide6.QtGui import QIntValidator, QDoubleValidator
 from PySide6.QtWidgets import QFrame, QVBoxLayout, QLabel, QSizePolicy, QHBoxLayout, QLineEdit, QLayout, QComboBox
 
 from imgmanip.models.resize_type import ResizeType
@@ -77,8 +77,7 @@ class ResizeTaskFrame(QFrame):
         self.resize_percentage_h_box.setContentsMargins(0, 0, 0, 0)
         self.percentage_input = QLineEdit(self)
         self.percentage_input.setObjectName(u"percentage_input")
-        self.percentage_input.setText(str(self.task.percent))
-        self.percentage_input.setValidator(int_validator)
+        self.percentage_input.setText(str(self.task.percent).replace('.', ','))
         self.percentage_input.textEdited.connect(self.change_resize)
         # % char
         self.percent_label = QLabel(self)
@@ -107,7 +106,17 @@ class ResizeTaskFrame(QFrame):
     def change_resize(self):
         self.task.new_width = int(self.resize_width_input.text())
         self.task.new_height = int(self.resize_height_input.text())
-        self.task.percent = float(self.percentage_input.text())
+        try:
+            self.task.percent = float(self.percentage_input.text())
+        except ValueError:
+            if str(self.task.percent).endswith('.0'):
+                self.percentage_input.setText(str(self.task.percent).replace('.0', ''))
+            else:
+                self.percentage_input.setText(str(self.task.percent))
+        if self.task.resize_type == ResizeType.SIZE:
+            self.task.name_extended = f'Resize {self.task.new_width}x{self.task.new_height}'
+        else:
+            self.task.name_extended = f'Resize {self.task.percent}%'
 
     # Change type of resize
     def change_type(self):
@@ -120,3 +129,7 @@ class ResizeTaskFrame(QFrame):
             self.resize_percentage_frame.show()
 
         self.task.resize_type = ResizeType(current_type)
+        if self.task.resize_type == ResizeType.SIZE:
+            self.task.name_extended = f'Resize {self.task.new_width}x{self.task.new_height}'
+        else:
+            self.task.name_extended = f'Resize {self.task.percent}%'

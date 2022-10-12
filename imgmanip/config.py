@@ -17,6 +17,7 @@ else:
 
 default_config = {
     'cpu_count': int(cpu_count() / 2),
+    'maximized_window': False,
 }
 
 
