@@ -28,7 +28,6 @@ class RightPart(QVBoxLayout):
         # List of the created tasks
         self.tasks_list = QListWidget()
         self.tasks_list.setObjectName(u"tasks_list")
-        self.tasks_list.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.tasks_list.setMaximumWidth(300)
 
         # Horizontal layout with add and remove button (TASKS)
@@ -83,15 +82,54 @@ class RightPart(QVBoxLayout):
         self.path_select_h_box.addWidget(self.path_pick_button)
         self.path_select_box.setLayout(self.path_select_h_box)
 
+        self.change_order_box = QFrame()
+        self.change_order_box.setMaximumWidth(300)
+        self.change_order_h_box = QHBoxLayout()
+        self.change_order_h_box.setContentsMargins(0, 0, 0, 0)
+        self.up_button = QPushButton()
+        self.up_button.setText('↑')
+        self.up_button.clicked.connect(self.move_task_up)
+        self.down_button = QPushButton()
+        self.down_button.setText('↓')
+        self.down_button.clicked.connect(self.move_task_down)
+        self.change_order_h_box.addWidget(self.up_button)
+        self.change_order_h_box.addWidget(self.down_button)
+        self.change_order_box.setLayout(self.change_order_h_box)
+
         # Adding widgets to right part
         self.addWidget(self.tasks_label)
         self.addWidget(self.tasks_list)
+        self.addWidget(self.change_order_box)
         self.addWidget(self.save_path_label)
         self.addWidget(self.save_type_picker)
         self.addWidget(self.path_select_box)
         self.addLayout(self.tasks_buttons_h_box)
 
         self.change_save_type()
+
+    # Move up
+    def move_task_up(self):
+        for selected_index in self.tasks_list.selectedIndexes():
+            selected_index = selected_index.row()
+            if selected_index > 0:
+                self.list_of_tasks.insert(selected_index - 1, self.list_of_tasks.pop(selected_index))
+                self.generate_list_of_tasks()
+                self.tasks_list.setCurrentRow(selected_index - 1)
+            else:
+                self.generate_list_of_tasks()
+                self.tasks_list.setCurrentRow(selected_index)
+
+    # Move down
+    def move_task_down(self):
+        for selected_index in self.tasks_list.selectedIndexes():
+            selected_index = selected_index.row()
+            if selected_index < self.tasks_list.count() - 1:
+                self.list_of_tasks.insert(selected_index + 1, self.list_of_tasks.pop(selected_index))
+                self.generate_list_of_tasks()
+                self.tasks_list.setCurrentRow(selected_index + 1)
+            else:
+                self.generate_list_of_tasks()
+                self.tasks_list.setCurrentRow(selected_index)
 
     # Save type
     def change_save_type(self):
@@ -130,7 +168,7 @@ class RightPart(QVBoxLayout):
     def generate_list_of_tasks(self):
         self.tasks_list.clear()
         for item in self.list_of_tasks:
-            self.tasks_list.addItem(item.name)
+            self.tasks_list.addItem(item.name_extended)
 
     # Remove task
     def remove_task(self):

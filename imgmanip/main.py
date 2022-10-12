@@ -1,5 +1,6 @@
 import os
 import sys
+from imgmanip import config
 
 from PySide6 import QtGui
 from PySide6.QtCore import Qt
@@ -16,7 +17,11 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setMouseTracking(True)
-        self.ui = UiMainWindow(self)
+        self.config = config.read_config()
+
+        if self.config['maximized_window']:
+            self.showMaximized()
+        self.ui = UiMainWindow(self, self.config)
 
 
 def main():

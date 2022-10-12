@@ -3,8 +3,8 @@ import os
 import sys
 import time
 from pathlib import Path
-
 from imgmanip import config
+
 from functools import partial
 import webbrowser
 
@@ -37,14 +37,14 @@ if sys.platform == 'win32':
 
 
 class UiMainWindow(QWidget):
-    def __init__(self, main_window):
+    def __init__(self, main_window, config_dict):
         # Main window
         super().__init__()
         if not main_window.objectName():
             main_window.setObjectName(u"MainWindow")
         main_window.resize(1000, 600)
         main_window.setWindowTitle('IMGManip')
-        self.config = config.read_config()
+        self.config = config_dict
 
         # main_window.setMaximumHeight(600)
         self.main_window = main_window
@@ -109,6 +109,10 @@ class UiMainWindow(QWidget):
             self.config = preferences_dialog.config
             config.write_config(preferences_dialog.config)
             self.left_part.sort_images()
+            if self.config['maximized_window']:
+                self.main_window.showMaximized()
+            else:
+                self.main_window.showNormal()
 
     # Exit tool
     @staticmethod
@@ -128,40 +132,42 @@ class UiMainWindow(QWidget):
             menu.addAction('Remove')
             menu.addAction('Remove from disk')
 
-            action = menu.exec_(event.globalPos())
-            if action:
-                item = source.itemAt(event.pos())
-                if item:
-                    # COPY PATH
-                    if action.toolTip() == 'Copy path':
-                        pyperclip.copy(item.text())
-                    # OPEN CONTAINING FOLDER
-                    elif action.toolTip() == 'Open containing folder':
-                        webbrowser.open(os.path.dirname(item.text()))
-                    # RENAME IMAGE FILE
-                    elif action.toolTip() == 'Rename':
-                        rename_dialog = RenameDialog(old_name=item.text())
-                        if rename_dialog.exec_() == QDialog.Accepted:
-                            new_name = rename_dialog.new_name_input.text()
-                            self.left_part.list_of_images[self.left_part.list_of_images.index(item.text())] = new_name
-                            os.rename(item.text(), new_name)
-                            self.left_part.sort_images()
-                            self.preview_image(self.left_part.images_list.findItems(new_name, Qt.MatchContains)[0])
-                        else:
-                            rename_dialog.close()
+            if source.itemAt(event.pos()):
+                action = menu.exec_(event.globalPos())
+                if action:
+                    item = source.itemAt(event.pos())
+                    if item:
+                        # COPY PATH
+                        if action.toolTip() == 'Copy path':
+                            pyperclip.copy(item.text())
+                        # OPEN CONTAINING FOLDER
+                        elif action.toolTip() == 'Open containing folder':
+                            webbrowser.open(os.path.dirname(item.text()))
+                        # RENAME IMAGE FILE
+                        elif action.toolTip() == 'Rename':
+                            rename_dialog = RenameDialog(old_name=item.text())
+                            if rename_dialog.exec_() == QDialog.Accepted:
+                                new_name = rename_dialog.new_name_input.text()
+                                self.left_part.list_of_images[
+                                    self.left_part.list_of_images.index(item.text())] = new_name
+                                os.rename(item.text(), new_name)
+                                self.left_part.sort_images()
+                                self.preview_image(self.left_part.images_list.findItems(new_name, Qt.MatchContains)[0])
+                            else:
+                                rename_dialog.close()
 
-                    # REMOVE IMAGE FROM LIST
-                    elif action.toolTip() == 'Remove':
-                        self.left_part.remove_image(False, item)
+                        # REMOVE IMAGE FROM LIST
+                        elif action.toolTip() == 'Remove':
+                            self.left_part.remove_image(False, item)
 
-                    # REMOVE IMAGE FROM DISK
-                    elif action.toolTip() == 'Remove from disk':
-                        confirm_delete = ConfirmDialog(title='Remove file from disk', desc='Are you sure?')
-                        if confirm_delete.exec_() == QDialog.Accepted:
-                            self.left_part.remove_image(True, item)
-                        else:
-                            confirm_delete.close()
-            return True
+                        # REMOVE IMAGE FROM DISK
+                        elif action.toolTip() == 'Remove from disk':
+                            confirm_delete = ConfirmDialog(title='Remove file from disk', desc='Are you sure?')
+                            if confirm_delete.exec_() == QDialog.Accepted:
+                                self.left_part.remove_image(True, item)
+                            else:
+                                confirm_delete.close()
+                return True
 
         if (event.type() == QtCore.QEvent.ContextMenu and
                 source is self.left_part.properties_list):
@@ -170,16 +176,16 @@ class UiMainWindow(QWidget):
             menu.addAction('Copy')
             menu.addAction('Copy value')
             menu.addAction('Copy property name')
-
-            action = menu.exec_(event.globalPos())
-            if action:
-                item = source.itemAt(event.pos())
-                if action.toolTip() == "Copy":
-                    pyperclip.copy(item.text())
-                elif action.toolTip() == "Copy value":
-                    pyperclip.copy(item.text().split(': ')[-1])
-                elif action.toolTip() == "Copy property name":
-                    pyperclip.copy(item.text().split(': ')[0])
+            if source.itemAt(event.pos()):
+                action = menu.exec_(event.globalPos())
+                if action:
+                    item = source.itemAt(event.pos())
+                    if action.toolTip() == "Copy":
+                        pyperclip.copy(item.text())
+                    elif action.toolTip() == "Copy value":
+                        pyperclip.copy(item.text().split(': ')[-1])
+                    elif action.toolTip() == "Copy property name":
+                        pyperclip.copy(item.text().split(': ')[0])
 
         return super(UiMainWindow, self).eventFilter(source, event)
 

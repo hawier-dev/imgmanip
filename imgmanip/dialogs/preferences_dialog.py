@@ -3,7 +3,9 @@ import multiprocessing
 from PySide6.QtCore import (QMetaObject, Qt)
 from PySide6.QtGui import QIntValidator, QFont
 from PySide6.QtWidgets import (QDialog, QDialogButtonBox,
-                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QLineEdit, QCheckBox)
+                               QSizePolicy, QGridLayout, QVBoxLayout, QLayout, QLabel, QLineEdit, QCheckBox, QComboBox)
+
+from imgmanip.widgets.horizontal_line import HorizontalLine
 
 
 class PreferencesDialog(QDialog):
@@ -28,6 +30,19 @@ class PreferencesDialog(QDialog):
         smaller_font = QFont()
         smaller_font.setPixelSize(12)
 
+        # ===============WINDOW=================
+        self.window_part_label = QLabel()
+        self.window_part_label.setText('Window settings')
+
+        self.fullscreen_checkbox = QCheckBox()
+        self.fullscreen_checkbox.setText('Maximized window')
+        self.fullscreen_checkbox.setChecked(self.config['maximized_window'])
+        self.fullscreen_checkbox.stateChanged.connect(self.value_changed)
+
+        # ===============TASK SETTINGS=================
+        self.task_part_label = QLabel()
+        self.task_part_label.setText('Task settings')
+
         self.cpu_count_label = QLabel()
         self.cpu_count_label.setText('CPU threads')
         self.cpu_max_label = QLabel()
@@ -39,9 +54,15 @@ class PreferencesDialog(QDialog):
         self.cpu_count_input.textChanged.connect(self.value_changed)
         self.cpu_count_input.setValidator(int_validator)
 
+        self.vertical_layout.addWidget(self.window_part_label)
+        self.vertical_layout.addWidget(self.fullscreen_checkbox)
+        self.vertical_layout.addWidget(HorizontalLine())
+
+        self.vertical_layout.addWidget(self.task_part_label)
         self.vertical_layout.addWidget(self.cpu_count_label)
         self.vertical_layout.addWidget(self.cpu_count_input)
         self.vertical_layout.addWidget(self.cpu_max_label)
+        self.vertical_layout.addWidget(HorizontalLine())
 
         self.button_box = QDialogButtonBox(self)
         self.button_box.setObjectName(u"button_box")
@@ -65,6 +86,7 @@ class PreferencesDialog(QDialog):
 
     # Update config values
     def value_changed(self):
+        # CPU COUNT SETTINGS
         try:
             cpu_count = int(self.cpu_count_input.text().strip())
             if cpu_count > self.cpu_count_max:
@@ -74,3 +96,6 @@ class PreferencesDialog(QDialog):
 
         except ValueError:
             pass
+
+        # FULLSCREEN
+        self.config['maximized_window'] = self.fullscreen_checkbox.isChecked()

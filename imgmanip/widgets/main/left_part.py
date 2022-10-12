@@ -157,7 +157,10 @@ class LeftPart(QVBoxLayout):
         self.properties_list.addItem(f'Width: {width}')
         self.properties_list.addItem(f'Height: {height}')
         self.properties_list.addItem(f'Mode: {image_mode}')
-        self.properties_list.addItem(f'Bit depth: {mode_to_bpp[image_mode]}')
+        try:
+            self.properties_list.addItem(f'Bit depth: {mode_to_bpp[image_mode]}')
+        except KeyError:
+            pass
         # EXIF
         for exif_tag in exif_tags:
             if exif_tag not in ignored_exif_list:
