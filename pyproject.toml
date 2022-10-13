@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "imgmanip"
-version = "0.0.4"
+version = "0.0.5"
 description = "Image manipulation tool written in python in which you can select a large number of photos and perform a lot of different operations on them."
 authors = ["Mikołaj Badyl <contact@hawier.dev>"]
 readme = "README.md"
