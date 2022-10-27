@@ -18,9 +18,11 @@ class FlipTaskFrame(QFrame):
         self.flip_box = QVBoxLayout()
 
         self.description_label = QLabel()
-        self.description_label.setText("This task flips the image in horizontal or vertical axis.")
+        self.description_label.setText(
+            "This task flips the image in horizontal or vertical axis."
+        )
 
-        self.flip_box.setObjectName(u"flip_box")
+        self.flip_box.setObjectName("flip_box")
         self.flip_box.setSizeConstraint(QLayout.SetDefaultConstraint)
 
         self.axis_picker = QComboBox()
@@ -41,3 +43,4 @@ class FlipTaskFrame(QFrame):
     # Change values
     def change_values(self):
         self.task.axis = Axis(self.axis_picker.currentText())
+        self.task.name_extended = f"Flip: {self.axis_picker.currentText()}"

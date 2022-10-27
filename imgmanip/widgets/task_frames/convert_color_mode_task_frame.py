@@ -1,4 +1,13 @@
-from PySide6.QtWidgets import QFrame, QVBoxLayout, QCheckBox, QLayout, QLabel, QPushButton, QColorDialog, QComboBox
+from PySide6.QtWidgets import (
+    QFrame,
+    QVBoxLayout,
+    QCheckBox,
+    QLayout,
+    QLabel,
+    QPushButton,
+    QColorDialog,
+    QComboBox,
+)
 
 from imgmanip.models.color_mode import ColorMode
 from imgmanip.models.task import ConvertColorModeTask
@@ -20,7 +29,7 @@ class ConvertColorModeTaskFrame(QFrame):
         )
 
         self.color_mode_box = QVBoxLayout()
-        self.color_mode_box.setObjectName(u"color_mode_box")
+        self.color_mode_box.setObjectName("color_mode_box")
         self.color_mode_box.setSizeConstraint(QLayout.SetDefaultConstraint)
 
         self.color_mode_picker = QComboBox(self)
@@ -38,3 +47,6 @@ class ConvertColorModeTaskFrame(QFrame):
     # Change values
     def change_values(self):
         self.task.color_mode = ColorMode(self.color_mode_picker.currentText())
+        self.task.name_extended = (
+            f"Convert color mode: {self.color_mode_picker.currentText()}"
+        )

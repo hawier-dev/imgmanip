@@ -1,7 +1,17 @@
 from PySide6 import QtWidgets
 from PySide6.QtGui import QCursor, Qt, QFont
-from PySide6.QtWidgets import QLabel, QVBoxLayout, QListWidget, QHBoxLayout, QPushButton, QDialog, QComboBox, \
-    QFrame, QLineEdit, QFileDialog
+from PySide6.QtWidgets import (
+    QLabel,
+    QVBoxLayout,
+    QListWidget,
+    QHBoxLayout,
+    QPushButton,
+    QDialog,
+    QComboBox,
+    QFrame,
+    QLineEdit,
+    QFileDialog,
+)
 
 from imgmanip.dialogs.new_task_dialog import NewTaskDialog
 from imgmanip.models.save_type import SaveType
@@ -14,7 +24,7 @@ class RightPart(QVBoxLayout):
         super().__init__()
         self.list_of_tasks = []
 
-        self.setObjectName(u"right_vbox")
+        self.setObjectName("right_vbox")
         self.root_widget = root_widget
 
         self.default_list_font = QFont()
@@ -22,32 +32,32 @@ class RightPart(QVBoxLayout):
 
         # "Tasks" text
         self.tasks_label = QLabel()
-        self.tasks_label.setObjectName(u"tasks_label")
-        self.tasks_label.setText('Tasks')
+        self.tasks_label.setObjectName("tasks_label")
+        self.tasks_label.setText("Tasks")
 
         # List of the created tasks
         self.tasks_list = QListWidget()
-        self.tasks_list.setObjectName(u"tasks_list")
+        self.tasks_list.setObjectName("tasks_list")
         self.tasks_list.setMaximumWidth(300)
 
         # Horizontal layout with add and remove button (TASKS)
         self.tasks_buttons_h_box = QHBoxLayout()
-        self.tasks_buttons_h_box.setObjectName(u"tasks_buttons_h_box")
+        self.tasks_buttons_h_box.setObjectName("tasks_buttons_h_box")
         # add button
         self.add_task_button = QPushButton()
-        self.add_task_button.setObjectName(u"add_task_button")
+        self.add_task_button.setObjectName("add_task_button")
         self.add_task_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.add_task_button.setText("Add")
         self.add_task_button.clicked.connect(self.add_task)
         # Edit button
         self.edit_task_button = QPushButton()
-        self.edit_task_button.setObjectName(u"edit_task_button")
+        self.edit_task_button.setObjectName("edit_task_button")
         self.edit_task_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.edit_task_button.setText("Edit")
         self.edit_task_button.clicked.connect(self.edit_task)
         # remove button
         self.remove_task_button = QPushButton()
-        self.remove_task_button.setObjectName(u"remove_task_button")
+        self.remove_task_button.setObjectName("remove_task_button")
         self.remove_task_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.remove_task_button.setText("Remove")
         self.remove_task_button.clicked.connect(self.remove_task)
@@ -58,7 +68,7 @@ class RightPart(QVBoxLayout):
 
         # Save type label
         self.save_path_label = QLabel()
-        self.save_path_label.setText('Save path')
+        self.save_path_label.setText("Save path")
 
         # Save type picker
         self.save_type_picker = QComboBox()
@@ -71,11 +81,11 @@ class RightPart(QVBoxLayout):
         self.path_select_h_box = QHBoxLayout()
         self.path_select_h_box.setContentsMargins(0, 0, 0, 0)
         self.path_input = QLineEdit()
-        self.path_input.setObjectName(u"path_label")
-        self.path_input.setText('None')
+        self.path_input.setObjectName("path_label")
+        self.path_input.setText("None")
 
         self.path_pick_button = QPushButton()
-        self.path_pick_button.setText('Select path')
+        self.path_pick_button.setText("Select path")
         self.path_pick_button.clicked.connect(self.select_save_path)
 
         self.path_select_h_box.addWidget(self.path_input)
@@ -87,10 +97,10 @@ class RightPart(QVBoxLayout):
         self.change_order_h_box = QHBoxLayout()
         self.change_order_h_box.setContentsMargins(0, 0, 0, 0)
         self.up_button = QPushButton()
-        self.up_button.setText('↑')
+        self.up_button.setText("↑")
         self.up_button.clicked.connect(self.move_task_up)
         self.down_button = QPushButton()
-        self.down_button.setText('↓')
+        self.down_button.setText("↓")
         self.down_button.clicked.connect(self.move_task_down)
         self.change_order_h_box.addWidget(self.up_button)
         self.change_order_h_box.addWidget(self.down_button)
@@ -112,7 +122,9 @@ class RightPart(QVBoxLayout):
         for selected_index in self.tasks_list.selectedIndexes():
             selected_index = selected_index.row()
             if selected_index > 0:
-                self.list_of_tasks.insert(selected_index - 1, self.list_of_tasks.pop(selected_index))
+                self.list_of_tasks.insert(
+                    selected_index - 1, self.list_of_tasks.pop(selected_index)
+                )
                 self.generate_list_of_tasks()
                 self.tasks_list.setCurrentRow(selected_index - 1)
             else:
@@ -124,7 +136,9 @@ class RightPart(QVBoxLayout):
         for selected_index in self.tasks_list.selectedIndexes():
             selected_index = selected_index.row()
             if selected_index < self.tasks_list.count() - 1:
-                self.list_of_tasks.insert(selected_index + 1, self.list_of_tasks.pop(selected_index))
+                self.list_of_tasks.insert(
+                    selected_index + 1, self.list_of_tasks.pop(selected_index)
+                )
                 self.generate_list_of_tasks()
                 self.tasks_list.setCurrentRow(selected_index + 1)
             else:
@@ -140,17 +154,20 @@ class RightPart(QVBoxLayout):
 
     # Select path to save the image
     def select_save_path(self):
-        select_save_path = QFileDialog.getExistingDirectory(self.root_widget, 'Open directory')
+        select_save_path = QFileDialog.getExistingDirectory(
+            self.root_widget, "Open directory"
+        )
         self.path_input.setText(select_save_path)
 
     # Edit task
     def edit_task(self):
         if self.tasks_list.selectedIndexes():
             task_index = self.tasks_list.row(self.tasks_list.selectedItems()[0])
-            edit_task_dialog = NewTaskDialog(
-                self.list_of_tasks[task_index])
+            edit_task_dialog = NewTaskDialog(self.list_of_tasks[task_index])
             if edit_task_dialog.exec_() == QDialog.Accepted:
-                self.list_of_tasks[task_index] = edit_task_dialog.tasks[edit_task_dialog.task_picker.currentText()].task
+                self.list_of_tasks[task_index] = edit_task_dialog.tasks[
+                    edit_task_dialog.task_picker.currentText()
+                ].task
 
                 self.generate_list_of_tasks()
 
@@ -161,7 +178,9 @@ class RightPart(QVBoxLayout):
     def add_task(self):
         new_task_dialog = NewTaskDialog()
         if new_task_dialog.exec_() == QDialog.Accepted:
-            self.list_of_tasks.append(new_task_dialog.tasks[new_task_dialog.task_picker.currentText()].task)
+            self.list_of_tasks.append(
+                new_task_dialog.tasks[new_task_dialog.task_picker.currentText()].task
+            )
 
         self.generate_list_of_tasks()
 
@@ -174,7 +193,9 @@ class RightPart(QVBoxLayout):
     def remove_task(self):
         for selected_task in self.tasks_list.selectedItems():
             index = self.tasks_list.row(selected_task)
-            self.list_of_tasks.remove(self.list_of_tasks[self.tasks_list.row(selected_task)])
+            self.list_of_tasks.remove(
+                self.list_of_tasks[self.tasks_list.row(selected_task)]
+            )
             self.generate_list_of_tasks()
             try:
                 self.tasks_list.setCurrentRow(index)

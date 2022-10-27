@@ -11,10 +11,16 @@ import webbrowser
 import pyperclip
 from PIL import Image
 from PySide6 import QtCore, QtWidgets
-from PySide6.QtCore import (QMetaObject, Qt)
-from PySide6.QtGui import (QPixmap, QAction)
-from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QWidget,
-                               QDialog, QMenuBar, QFileDialog)
+from PySide6.QtCore import QMetaObject, Qt
+from PySide6.QtGui import QPixmap, QAction
+from PySide6.QtWidgets import (
+    QGridLayout,
+    QHBoxLayout,
+    QWidget,
+    QDialog,
+    QMenuBar,
+    QFileDialog,
+)
 
 from imgmanip.dialogs.confirm_dialog import ConfirmDialog
 from imgmanip.dialogs.info_dialog import InfoDialog
@@ -31,9 +37,9 @@ from imgmanip.widgets.main.right_part import RightPart
 Image.MAX_IMAGE_PIXELS = 933120000
 cpu_count = multiprocessing.cpu_count()
 
-platform_path = '/'
-if sys.platform == 'win32':
-    platform_path = '\\'
+platform_path = "/"
+if sys.platform == "win32":
+    platform_path = "\\"
 
 
 class UiMainWindow(QWidget):
@@ -41,9 +47,9 @@ class UiMainWindow(QWidget):
         # Main window
         super().__init__()
         if not main_window.objectName():
-            main_window.setObjectName(u"MainWindow")
+            main_window.setObjectName("MainWindow")
         main_window.resize(1000, 600)
-        main_window.setWindowTitle('IMGManip')
+        main_window.setWindowTitle("IMGManip")
         self.config = config_dict
 
         # main_window.setMaximumHeight(600)
@@ -62,13 +68,13 @@ class UiMainWindow(QWidget):
 
         # Main central widget
         self.central_widget = QWidget(main_window)
-        self.central_widget.setObjectName(u"central_widget")
+        self.central_widget.setObjectName("central_widget")
         self.gridLayout = QGridLayout(self.central_widget)
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setObjectName("gridLayout")
 
         # Horizontal layout split on 3 parts
         self.main_h_layout = QHBoxLayout()
-        self.main_h_layout.setObjectName(u"main_h_layout")
+        self.main_h_layout.setObjectName("main_h_layout")
 
         self.left_part = LeftPart(self)
         self.left_part.images_list.installEventFilter(self)
@@ -109,7 +115,7 @@ class UiMainWindow(QWidget):
             self.config = preferences_dialog.config
             config.write_config(preferences_dialog.config)
             self.left_part.sort_images()
-            if self.config['maximized_window']:
+            if self.config["maximized_window"]:
                 self.main_window.showMaximized()
             else:
                 self.main_window.showNormal()
@@ -121,16 +127,18 @@ class UiMainWindow(QWidget):
 
     # Menus on right click
     def eventFilter(self, source, event):
-        if (event.type() == QtCore.QEvent.ContextMenu and
-                source is self.left_part.images_list):
+        if (
+                event.type() == QtCore.QEvent.ContextMenu
+                and source is self.left_part.images_list
+        ):
 
             # Menu for every item
             menu = QtWidgets.QMenu()
-            menu.addAction('Copy path')
-            menu.addAction('Open containing folder')
-            menu.addAction('Rename')
-            menu.addAction('Remove')
-            menu.addAction('Remove from disk')
+            menu.addAction("Copy path")
+            menu.addAction("Open containing folder")
+            menu.addAction("Rename")
+            menu.addAction("Remove")
+            menu.addAction("Remove from disk")
 
             if source.itemAt(event.pos()):
                 action = menu.exec_(event.globalPos())
@@ -138,44 +146,53 @@ class UiMainWindow(QWidget):
                     item = source.itemAt(event.pos())
                     if item:
                         # COPY PATH
-                        if action.toolTip() == 'Copy path':
+                        if action.toolTip() == "Copy path":
                             pyperclip.copy(item.text())
                         # OPEN CONTAINING FOLDER
-                        elif action.toolTip() == 'Open containing folder':
+                        elif action.toolTip() == "Open containing folder":
                             webbrowser.open(os.path.dirname(item.text()))
                         # RENAME IMAGE FILE
-                        elif action.toolTip() == 'Rename':
+                        elif action.toolTip() == "Rename":
                             rename_dialog = RenameDialog(old_name=item.text())
                             if rename_dialog.exec_() == QDialog.Accepted:
                                 new_name = rename_dialog.new_name_input.text()
                                 self.left_part.list_of_images[
-                                    self.left_part.list_of_images.index(item.text())] = new_name
+                                    self.left_part.list_of_images.index(item.text())
+                                ] = new_name
                                 os.rename(item.text(), new_name)
                                 self.left_part.sort_images()
-                                self.preview_image(self.left_part.images_list.findItems(new_name, Qt.MatchContains)[0])
+                                self.preview_image(
+                                    self.left_part.images_list.findItems(
+                                        new_name, Qt.MatchContains
+                                    )[0]
+                                )
                             else:
                                 rename_dialog.close()
 
                         # REMOVE IMAGE FROM LIST
-                        elif action.toolTip() == 'Remove':
+                        elif action.toolTip() == "Remove":
                             self.left_part.remove_image(False, item)
 
                         # REMOVE IMAGE FROM DISK
-                        elif action.toolTip() == 'Remove from disk':
-                            confirm_delete = ConfirmDialog(title='Remove file from disk', desc='Are you sure?')
+                        elif action.toolTip() == "Remove from disk":
+                            confirm_delete = ConfirmDialog(
+                                title="Remove file from disk", desc="Are you sure?"
+                            )
                             if confirm_delete.exec_() == QDialog.Accepted:
                                 self.left_part.remove_image(True, item)
                             else:
                                 confirm_delete.close()
                 return True
 
-        if (event.type() == QtCore.QEvent.ContextMenu and
-                source is self.left_part.properties_list):
+        if (
+                event.type() == QtCore.QEvent.ContextMenu
+                and source is self.left_part.properties_list
+        ):
             # Menu for every item
             menu = QtWidgets.QMenu()
-            menu.addAction('Copy')
-            menu.addAction('Copy value')
-            menu.addAction('Copy property name')
+            menu.addAction("Copy")
+            menu.addAction("Copy value")
+            menu.addAction("Copy property name")
             if source.itemAt(event.pos()):
                 action = menu.exec_(event.globalPos())
                 if action:
@@ -183,9 +200,9 @@ class UiMainWindow(QWidget):
                     if action.toolTip() == "Copy":
                         pyperclip.copy(item.text())
                     elif action.toolTip() == "Copy value":
-                        pyperclip.copy(item.text().split(': ')[-1])
+                        pyperclip.copy(item.text().split(": ")[-1])
                     elif action.toolTip() == "Copy property name":
-                        pyperclip.copy(item.text().split(': ')[0])
+                        pyperclip.copy(item.text().split(": ")[0])
 
         return super(UiMainWindow, self).eventFilter(source, event)
 
@@ -198,26 +215,31 @@ class UiMainWindow(QWidget):
                 self.left_part.generate_image_properties(file_name)
             except IndexError or TypeError:
                 pix = QPixmap(self.left_part.images_list.item(0).text())
-                self.left_part.generate_image_properties(self.left_part.images_list.item(0).text())
+                self.left_part.generate_image_properties(
+                    self.left_part.images_list.item(0).text()
+                )
         else:
             try:
                 pix = QPixmap(self.left_part.images_list.selectedItems()[0].text())
-                self.left_part.generate_image_properties(self.left_part.images_list.selectedItems()[0].text())
+                self.left_part.generate_image_properties(
+                    self.left_part.images_list.selectedItems()[0].text()
+                )
             except IndexError:
                 pix = QPixmap(self.left_part.images_list.item(0).text())
-                self.left_part.generate_image_properties(self.left_part.images_list.item(0).text())
+                self.left_part.generate_image_properties(
+                    self.left_part.images_list.item(0).text()
+                )
 
         pix_size = pix.size()
 
-        self.center_part.image_preview.setPixmap(
-            pix.scaled(pix_size)
-        )
+        self.center_part.image_preview.setPixmap(pix.scaled(pix_size))
 
         if self.fit_in_view_action.isChecked():
             self.center_part.fit_in_view()
 
-        self.center_part.image_preview_scene.setSceneRect(0, 0, pix_size.toTuple()[0],
-                                                          pix_size.toTuple()[1])
+        self.center_part.image_preview_scene.setSceneRect(
+            0, 0, pix_size.toTuple()[0], pix_size.toTuple()[1]
+        )
 
     # Start tasks
     def start_tasks(self):
@@ -225,38 +247,45 @@ class UiMainWindow(QWidget):
 
         # If no image added
         if not self.left_part.list_of_images:
-            error_dialog = InfoDialog(title='Start tasks',
-                                      text='You need to select at least one image.')
+            error_dialog = InfoDialog(
+                title="Start tasks", text="You need to select at least one image."
+            )
             if error_dialog.exec_() == QDialog.Accepted:
                 return
         # If no task added
         if not self.right_part.list_of_tasks:
-            error_dialog = InfoDialog(title='Start tasks',
-                                      text='You need to select at least one task.')
+            error_dialog = InfoDialog(
+                title="Start tasks", text="You need to select at least one task."
+            )
             if error_dialog.exec_() == QDialog.Accepted:
                 return
 
         # If no path selected
-        if not os.path.exists(
-                self.right_part.path_input.text()) \
-                and \
-                self.right_part.save_type_picker.currentText() == SaveType.SELECT_PATH.value:
+        if (
+                not os.path.exists(self.right_part.path_input.text())
+                and self.right_part.save_type_picker.currentText()
+                == SaveType.SELECT_PATH.value
+        ):
 
-            error_dialog = InfoDialog(title='Start tasks',
-                                      text='You need to select valid path.')
+            error_dialog = InfoDialog(
+                title="Start tasks", text="You need to select valid path."
+            )
             if error_dialog.exec_() == QDialog.Accepted:
                 return
         # Overwrite warning
         if self.right_part.save_type_picker.currentText() == SaveType.OVERWRITE.value:
-            confirm_delete = ConfirmDialog(title='Start tasks',
-                                           desc='This process will overwrite all selected files!\nAre you sure?')
+            confirm_delete = ConfirmDialog(
+                title="Start tasks",
+                desc="This process will overwrite all selected files!\nAre you sure?",
+            )
             if confirm_delete.exec_() == QDialog.Accepted:
                 confirm_delete.close()
             else:
                 confirm_delete.close()
                 return
-        self.center_part.start_button.setText('Stop')
-        self.center_part.progress.setVisible(True)
+        self.center_part.start_button.hide()
+        self.center_part.progress.show()
+        self.center_part.progress.setValue(0)
 
         # try:
         #     self.left_part.images_list.setCurrentRow(0)
@@ -264,15 +293,20 @@ class UiMainWindow(QWidget):
         # except IndexError:
         #     pass
 
-        images_list = [self.left_part.images_list.item(index).text() for index in
-                       range(self.left_part.images_list.count())]
+        images_list = [
+            self.left_part.images_list.item(index).text()
+            for index in range(self.left_part.images_list.count())
+        ]
 
         # Multiprocessing
-        pool = multiprocessing.Pool(processes=self.config['cpu_count'])
-        run_func = partial(run_task, images_list=images_list,
-                           list_of_tasks=self.right_part.list_of_tasks,
-                           save_type=SaveType(self.right_part.save_type_picker.currentText()),
-                           out_path=self.right_part.path_input.text())
+        pool = multiprocessing.Pool(processes=self.config["cpu_count"])
+        run_func = partial(
+            run_task,
+            images_list=images_list,
+            list_of_tasks=self.right_part.list_of_tasks,
+            save_type=SaveType(self.right_part.save_type_picker.currentText()),
+            out_path=self.right_part.path_input.text(),
+        )
         jobs = []
         job_count = 0
         images_count = len(images_list)
@@ -281,28 +315,36 @@ class UiMainWindow(QWidget):
             job_count += 1
             progress = round((job_count / len(images_list)) * 100, 1)
             self.center_part.progress.setValue(progress)
-            self.center_part.progress.setFormat(f'{progress}% {job_count}/{images_count}')
+            self.center_part.progress.setFormat(
+                f"{progress}% {job_count}/{images_count}"
+            )
 
         pool.close()
         end_time = time.time()
 
         error_images = [ele for ele in jobs if ele is not None]
         if error_images:
-            save_log_dialog = ConfirmDialog(title=f'Could not process {len(error_images)} files',
-                                            desc=f"Could not process {len(error_images)} files. \n"
-                                                 "Do you want to save a text file with the names of this files?")
+            save_log_dialog = ConfirmDialog(
+                title=f"Could not process {len(error_images)} files",
+                desc=f"Could not process {len(error_images)} files. \n"
+                     "Do you want to save a text file with the names of this files?",
+            )
             if save_log_dialog.exec_() == QDialog.Accepted:
-                txt_file = QFileDialog.getSaveFileName(self, 'Save text file', str(Path.home()) + '/error-images.txt',
-                                                       'Text file (*.txt)')
-                if txt_file[0] != '':
+                txt_file = QFileDialog.getSaveFileName(
+                    self,
+                    "Save text file",
+                    str(Path.home()) + "/error-images.txt",
+                    "Text file (*.txt)",
+                )
+                if txt_file[0] != "":
                     save_images_names_to_txt(error_images, txt_file[0])
 
-        self.center_part.progress.setStyleSheet('color: white')
-        self.center_part.progress.setVisible(False)
-        self.center_part.start_button.setText('Start')
+        self.center_part.progress.setStyleSheet("color: white")
+        self.center_part.progress.hide()
+        self.center_part.start_button.show()
 
-        done_text = f'Done in:'
+        done_text = f"Done in:"
         done_text = create_time_str(done_text, end_time - start_time)
 
-        time_dialog = InfoDialog(title='Done', text=done_text)
+        time_dialog = InfoDialog(title="Done", text=done_text)
         time_dialog.exec()

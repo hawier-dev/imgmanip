@@ -18,9 +18,10 @@ class ConvertTaskFrame(QFrame):
 
         self.description_label = QLabel()
         self.description_label.setText(
-            "This task converts the image to the other format.")
+            "This task converts the image to the other format."
+        )
 
-        self.convert_box.setObjectName(u"convert_box")
+        self.convert_box.setObjectName("convert_box")
         self.convert_box.setSizeConstraint(QLayout.SetDefaultConstraint)
         # Extension picker label
         self.extension_picker_label = QLabel()
@@ -31,7 +32,7 @@ class ConvertTaskFrame(QFrame):
         self.extension_picker.setCurrentText(self.task.convert_ext.value)
         self.extension_picker.currentTextChanged.connect(self.change_values)
 
-        self.extension_picker.setObjectName(u"extension_picker")
+        self.extension_picker.setObjectName("extension_picker")
 
         # self.extension_picker.currentTextChanged.connect(self.change_extension)
         self.convert_box.addWidget(self.description_label)
@@ -44,3 +45,4 @@ class ConvertTaskFrame(QFrame):
     # Change values
     def change_values(self):
         self.task.convert_ext = ImageExtension(self.extension_picker.currentText())
+        self.task.name_extended = f"Convert: {self.extension_picker.currentText()}"

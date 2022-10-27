@@ -1,4 +1,12 @@
-from PySide6.QtWidgets import QFrame, QVBoxLayout, QCheckBox, QLayout, QLabel, QPushButton, QColorDialog
+from PySide6.QtWidgets import (
+    QFrame,
+    QVBoxLayout,
+    QCheckBox,
+    QLayout,
+    QLabel,
+    QPushButton,
+    QColorDialog,
+)
 
 from imgmanip.models.task import ColorDetectionTask
 from imgmanip.widgets.horizontal_line import HorizontalLine
@@ -24,20 +32,20 @@ class ColorDetectionTaskFrame(QFrame):
 
         self.color_detection_frame = QFrame()
         self.color_detection_box = QVBoxLayout()
-        self.color_detection_box.setObjectName(u"color_detection_box")
+        self.color_detection_box.setObjectName("color_detection_box")
         self.color_detection_box.setSizeConstraint(QLayout.SetDefaultConstraint)
         # Color picker
         self.color_picker_button = QPushButton()
-        self.color_picker_button.setText('Pick color')
+        self.color_picker_button.setText("Pick color")
         self.color_picker_button.clicked.connect(self.color_picker)
 
         if task and type(task) == ColorDetectionTask:
             if task.color:
-                self.color_picker_button.setText(f'RGB: {task.color}')
+                self.color_picker_button.setText(f"RGB: {task.color}")
 
         # Save mask
         self.save_mask_checkbox = QCheckBox()
-        self.save_mask_checkbox.setText('Save image mask')
+        self.save_mask_checkbox.setText("Save image mask")
         self.save_mask_checkbox.setChecked(self.task.save_mask)
         self.save_mask_checkbox.stateChanged.connect(self.change_values)
 
@@ -56,5 +64,5 @@ class ColorDetectionTaskFrame(QFrame):
     def color_picker(self):
         color = QColorDialog.getColor()
         selected_color = [color.getRgb()[0], color.getRgb()[1], color.getRgb()[2]]
-        self.color_picker_button.setText(f'RGB: {selected_color}')
+        self.color_picker_button.setText(f"RGB: {selected_color}")
         self.task.color = selected_color
