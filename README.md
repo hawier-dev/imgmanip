@@ -2,6 +2,8 @@ Image manipulation tool in which you can select a large number of photos and
 perform a lot of different operations on them.
 ---
 
+![screenshot](assets/screenshot.png)
+
 ## Installation
 
 ### Install from PyPI
