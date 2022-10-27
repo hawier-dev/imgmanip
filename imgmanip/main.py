@@ -9,7 +9,9 @@ from PySide6.QtWidgets import QMainWindow, QApplication
 from imgmanip.widgets.main_screen import UiMainWindow
 import qdarktheme
 
-os.environ['QT_IMAGEIO_MAXALLOC'] = "10000000000000000000000000000000000000000000000000000000000000000"
+os.environ[
+    "QT_IMAGEIO_MAXALLOC"
+] = "10000000000000000000000000000000000000000000000000000000000000000"
 QtGui.QImageReader.setAllocationLimit(0)
 
 
@@ -19,7 +21,7 @@ class MainWindow(QMainWindow):
         self.setMouseTracking(True)
         self.config = config.read_config()
 
-        if self.config['maximized_window']:
+        if self.config["maximized_window"]:
             self.showMaximized()
         self.ui = UiMainWindow(self, self.config)
 

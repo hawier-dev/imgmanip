@@ -1,5 +1,14 @@
 from PySide6.QtGui import QIntValidator, QDoubleValidator
-from PySide6.QtWidgets import QFrame, QVBoxLayout, QLabel, QSizePolicy, QHBoxLayout, QLineEdit, QLayout, QComboBox
+from PySide6.QtWidgets import (
+    QFrame,
+    QVBoxLayout,
+    QLabel,
+    QSizePolicy,
+    QHBoxLayout,
+    QLineEdit,
+    QLayout,
+    QComboBox,
+)
 
 from imgmanip.models.resize_type import ResizeType
 from imgmanip.models.task import ResizeTask
@@ -13,15 +22,18 @@ class ResizeTaskFrame(QFrame):
         if task and type(task) == ResizeTask:
             self.task = task
         else:
-            self.task = ResizeTask(resize_type=ResizeType.SIZE, new_width=800, new_height=600)
+            self.task = ResizeTask(
+                resize_type=ResizeType.SIZE, new_width=800, new_height=600
+            )
 
         self.resize_box = QVBoxLayout()
-        self.resize_box.setObjectName(u"resize_box")
+        self.resize_box.setObjectName("resize_box")
         self.resize_box.setSizeConstraint(QLayout.SetDefaultConstraint)
 
         self.description_label = QLabel()
         self.description_label.setText(
-            "This task resizes the images to the given resolution or by percentage.")
+            "This task resizes the images to the given resolution or by percentage."
+        )
 
         # Resize types
         self.resize_type_picker = QComboBox()
@@ -33,11 +45,13 @@ class ResizeTaskFrame(QFrame):
 
         # Name label
         self.resize_label = QLabel(self)
-        self.resize_label.setObjectName(u"name_label")
+        self.resize_label.setObjectName("name_label")
         size_policy_resize_label = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         size_policy_resize_label.setHorizontalStretch(0)
         size_policy_resize_label.setVerticalStretch(0)
-        size_policy_resize_label.setHeightForWidth(self.resize_label.sizePolicy().hasHeightForWidth())
+        size_policy_resize_label.setHeightForWidth(
+            self.resize_label.sizePolicy().hasHeightForWidth()
+        )
         self.resize_label.setSizePolicy(size_policy_resize_label)
         self.resize_label.setText("New size")
 
@@ -50,18 +64,18 @@ class ResizeTaskFrame(QFrame):
         self.resize_inputs_h_box = QHBoxLayout()
         self.resize_inputs_h_box.setContentsMargins(0, 0, 0, 0)
         self.resize_width_input = QLineEdit(self)
-        self.resize_width_input.setObjectName(u"resize_width_input")
+        self.resize_width_input.setObjectName("resize_width_input")
         self.resize_width_input.setText(str(self.task.new_width))
         self.resize_width_input.setValidator(int_validator)
         self.resize_width_input.textEdited.connect(self.change_resize)
 
         # X label between width and height -> width x height
         self.x_label = QLabel(self)
-        self.x_label.setObjectName(u"name_label")
-        self.x_label.setText('x')
+        self.x_label.setObjectName("name_label")
+        self.x_label.setText("x")
 
         self.resize_height_input = QLineEdit(self)
-        self.resize_height_input.setObjectName(u"resize_height_input")
+        self.resize_height_input.setObjectName("resize_height_input")
         self.resize_height_input.setText(str(self.task.new_height))
         self.resize_height_input.setValidator(int_validator)
         self.resize_height_input.textEdited.connect(self.change_resize)
@@ -76,13 +90,13 @@ class ResizeTaskFrame(QFrame):
         self.resize_percentage_h_box = QHBoxLayout()
         self.resize_percentage_h_box.setContentsMargins(0, 0, 0, 0)
         self.percentage_input = QLineEdit(self)
-        self.percentage_input.setObjectName(u"percentage_input")
-        self.percentage_input.setText(str(self.task.percent).replace('.', ','))
+        self.percentage_input.setObjectName("percentage_input")
+        self.percentage_input.setText(str(self.task.percent).replace(".", ","))
         self.percentage_input.textEdited.connect(self.change_resize)
         # % char
         self.percent_label = QLabel(self)
-        self.percent_label.setObjectName(u"name_label")
-        self.percent_label.setText('%')
+        self.percent_label.setObjectName("name_label")
+        self.percent_label.setText("%")
 
         self.resize_percentage_h_box.addWidget(self.percentage_input)
         self.resize_percentage_h_box.addWidget(self.percent_label)
@@ -109,27 +123,31 @@ class ResizeTaskFrame(QFrame):
         try:
             self.task.percent = float(self.percentage_input.text())
         except ValueError:
-            if str(self.task.percent).endswith('.0'):
-                self.percentage_input.setText(str(self.task.percent).replace('.0', ''))
+            if str(self.task.percent).endswith(".0"):
+                self.percentage_input.setText(str(self.task.percent).replace(".0", ""))
             else:
                 self.percentage_input.setText(str(self.task.percent))
         if self.task.resize_type == ResizeType.SIZE:
-            self.task.name_extended = f'Resize {self.task.new_width}x{self.task.new_height}'
+            self.task.name_extended = (
+                f"Resize: {self.task.new_width}x{self.task.new_height}"
+            )
         else:
-            self.task.name_extended = f'Resize {self.task.percent}%'
+            self.task.name_extended = f"Resize: {self.task.percent}%"
 
     # Change type of resize
     def change_type(self):
         current_type = self.resize_type_picker.currentText()
-        if current_type == 'Size':
+        if current_type == "Size":
             self.resize_size_frame.show()
             self.resize_percentage_frame.hide()
-        elif current_type == 'Percentage':
+        elif current_type == "Percentage":
             self.resize_size_frame.hide()
             self.resize_percentage_frame.show()
 
         self.task.resize_type = ResizeType(current_type)
         if self.task.resize_type == ResizeType.SIZE:
-            self.task.name_extended = f'Resize {self.task.new_width}x{self.task.new_height}'
+            self.task.name_extended = (
+                f"Resize: {self.task.new_width}x{self.task.new_height}"
+            )
         else:
-            self.task.name_extended = f'Resize {self.task.percent}%'
+            self.task.name_extended = f"Resize: {self.task.percent}%"

@@ -13,7 +13,9 @@ def flip_image(image, flip_task: FlipTask, save_type: SaveType, out_path=None):
     elif flip_task.axis == Axis.VERTICAL:
         img = ImageOps.flip(img)
 
-    new_file_name = save_image_path(image_path=image, save_type=save_type, out_path=out_path)
+    new_file_name = save_image_path(
+        image_path=image, save_type=save_type, out_path=out_path
+    )
 
     img.save(new_file_name)
     return new_file_name

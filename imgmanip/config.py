@@ -6,24 +6,24 @@ from sys import platform
 import yaml
 
 if platform == "linux" or platform == "linux2":
-    config_path = str(Path.home()) + '/.local/share/imgmanip'
-    config_file_path = config_path + '/config.yaml'
+    config_path = str(Path.home()) + "/.local/share/imgmanip"
+    config_file_path = config_path + "/config.yaml"
 elif platform == "win32":
-    config_path = str(Path.home()) + '\\AppData\\Local\\imgmanip'
-    config_file_path = config_path + '\\config.yaml'
+    config_path = str(Path.home()) + "\\AppData\\Local\\imgmanip"
+    config_file_path = config_path + "\\config.yaml"
 else:
     config_path = None
     config_file_path = None
 
 default_config = {
-    'cpu_count': int(cpu_count() / 2),
-    'maximized_window': False,
+    "cpu_count": int(cpu_count() / 2),
+    "maximized_window": False,
 }
 
 
 def write_config(config):
     os.makedirs(config_path, exist_ok=True)
-    config_file = open(config_file_path, 'w')
+    config_file = open(config_file_path, "w")
     yaml.dump(config, config_file)
 
 
