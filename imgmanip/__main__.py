@@ -1,3 +1,3 @@
-from imgmanip.main import main
+from main_window import main
 
 main()
